@@ -6,7 +6,7 @@
 		var dir = "images" + level + "/";
 		var fileextension = ".jpg";
 		var div = document.getElementById('pics' + level);
-		div.innerHTML = div.innerHTML + '<h2>' + level + 'th floor</h2>'
+		div.innerHTML = div.innerHTML + '<div class="jumbotron well"><h2>' + level + 'th floor</h2></div>'
 		$.ajax({
 		    //This will retrieve the contents of the folder if the folder is configured as 'browsable'
 		    url: dir,
