@@ -2,9 +2,11 @@
 <html lang="en">
 
 <script type="text/javascript">
-	function loadPics(){
-		var dir = "images/";
+	function loadPics(level){
+		var dir = "images" + level + "/";
 		var fileextension = ".jpg";
+		var div = document.getElementById('pics' + level);
+		div.innerHTML = div.innerHTML + '<h2>' + level + 'th floor</h2>'
 		$.ajax({
 		    //This will retrieve the contents of the folder if the folder is configured as 'browsable'
 		    url: dir,
@@ -12,13 +14,16 @@
 		        //Lsit all png file names in the page
 		        $(data).find("a:contains(" + fileextension + ")").each(function () {
 		            var filename = this.href.replace(window.location.host, "").replace("http:///", "").split('/').reverse()[0];
-		            console.log(filename);
-		            var div = document.getElementById('pics');
-		            div.innerHTML = div.innerHTML + '<div class="col-md-4"><img src="' + dir + filename + '"></div>';
-		            // $("body").append($("<img src=" + dir + filename + "></img>"));
+		            // console.log(filename);
+		            div.innerHTML = div.innerHTML + '<div class="col-md-4"><img width=240 height=320 src="' + dir + filename + '"></div>';
 		        });
 		    }
 		});
+	}
+
+	function init(){
+		loadPics(9);
+		loadPics(22);
 	}
 </script>
 
@@ -36,7 +41,7 @@
     <link href="css/style.css" rel="stylesheet">
 
   </head>
-  <body onload="loadPics();">
+  <body onload="init();">
 
     <div class="container-fluid">
 	<div class="row">
@@ -80,8 +85,8 @@
 				
 			</nav>
 			
-			<div class="row" id="pics">
-				<div class="col-md-4">
+			<div class="row" id="pics9">
+				<!--div class="col-md-4">
 					<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/">
 					<h2>
 						Heading
@@ -89,19 +94,10 @@
 					<p>
 						Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
 					</p>
-				</div>
-				<div class="col-md-4">
-					<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/">
-				</div>
-				<div class="col-md-4">
-					<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/">
-				</div>
-				<div class="col-md-4">
-					<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/">
-				</div>
-				<div class="col-md-4">
-					<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/">
-				</div>
+				</div-->
+			</div>
+
+			<div class="row" id="pics22">
 			</div>
 		</div>
 	</div>
