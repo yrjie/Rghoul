@@ -11,7 +11,7 @@
 		    success: function (data) {
 		        //Lsit all png file names in the page
 		        $(data).find("a:contains(" + fileextension + ")").each(function () {
-		            var filename = this.href.replace(window.location.host, "").replace("http:///", "");
+		            var filename = this.href.replace(window.location.host, "").replace("http:///", "").split('/').reverse()[0];
 		            console.log(filename);
 		            var div = document.getElementById('pics');
 		            div.innerHTML = div.innerHTML + '<div class="col-md-4"><img src="' + dir + filename + '"></div>';
