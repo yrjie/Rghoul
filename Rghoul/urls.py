@@ -12,6 +12,9 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', views.index),
     url(r'^index/', views.index),
+    url(r'^like/(?P<picName>.+)/$', views.like),
+    url(r'^dislike/(?P<picName>.+)/$', views.dislike),
+    url(r'^update/$', views.update),
 
     url(r'^admin/', include(admin.site.urls)),
 ) #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

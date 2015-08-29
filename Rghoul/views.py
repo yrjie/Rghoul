@@ -4,8 +4,7 @@ from os import listdir
 from os.path import isfile, join
 import os
 import settings
-import datetime
-import time
+import utils
 
 # Create your views here.
 def home(request):
@@ -18,14 +17,30 @@ def detail(request, my_args):
     return HttpResponse(str)
 
 def index(request):
-    ts = time.time();
-    today = datetime.datetime.fromtimestamp(ts).strftime("%Y%m%d");
+    today = utils.getToday()
     prefix = settings.BASE_DIR + "/static/" + today
     if not os.path.exists(prefix):
         os.makedirs(prefix + "/lunch9")
         os.makedirs(prefix + "/lunch22")
         os.makedirs(prefix + "/dinner9")
         os.makedirs(prefix + "/dinner22")
+    lunch9, lunch22, dinner9, dinner22 = utils.getFileLists()
+    
+    return render_to_response("index.html", {"today":today, "lunch9":lunch9, "lunch22":lunch22, 
+                                             "dinner9":dinner9, "dinner22":dinner22})
+    
+def like(request, picName):
+    return HttpResponse(picName + "33")
+
+def dislike(request, picName):
+    return HttpResponse(picName + "33")
+
+def update(request):
+    today = utils.getToday()
+    prefix = settings.BASE_DIR + "/static/" + today
+    if not os.path.exists(prefix):
+        return HttpResponse("ERROR: today's pictures are not uploaded.")
+    
     lunch9dir = prefix + "/lunch9"
     lunch9 = [ f for f in listdir(lunch9dir) if isfile(join(lunch9dir,f)) ]
     lunch22dir = prefix + "/lunch22"
@@ -36,5 +51,3 @@ def index(request):
     dinner22dir = prefix + "/dinner22"
     dinner22 = [ f for f in listdir(dinner22dir) if isfile(join(dinner22dir,f)) ]
     
-    return render_to_response("index.html", {"today":today, "lunch9":lunch9, "lunch22":lunch22, 
-                                             "dinner9":dinner9, "dinner22":dinner22})
