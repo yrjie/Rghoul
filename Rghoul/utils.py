@@ -1,6 +1,9 @@
 import time
 import datetime
 import settings
+from os.path import isfile, join
+from os import listdir
+import os
 
 def getToday():
     ts = time.time();
@@ -10,6 +13,13 @@ def getToday():
 def getFileLists():
     today = getToday()
     prefix = settings.BASE_DIR + "/static/" + today
+    if not os.path.exists(prefix):  # make sure index will show properly
+        os.makedirs(prefix + "/lunch9")
+        os.makedirs(prefix + "/lunch22")
+        os.makedirs(prefix + "/dinner9")
+        os.makedirs(prefix + "/dinner22")
+        return [], [], [], []
+    
     lunch9dir = prefix + "/lunch9"
     lunch9 = [ f for f in listdir(lunch9dir) if isfile(join(lunch9dir,f)) ]
     lunch22dir = prefix + "/lunch22"

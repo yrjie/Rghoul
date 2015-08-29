@@ -33,10 +33,28 @@
 	    xmlHttp.send( null );
 	    cnt.innerHTML = xmlHttp.responseText;
 	}
+	
+	function init(){
+		var likes = document.getElementsByClassName("pic_like")
+		for (var i=0; i<likes.length; i++){
+			picName = likes[i].id.replace('like_', '');
+			var cnt1 = document.getElementById("like_" + picName);
+			var xmlHttp1 = new XMLHttpRequest();
+		    xmlHttp1.open( "GET", 'get_like/' + picName, false );
+		    xmlHttp1.send( null );
+		    cnt1.innerHTML = xmlHttp1.responseText;
+		    
+		    var cnt2 = document.getElementById("dislike_" + picName);
+			var xmlHttp2 = new XMLHttpRequest();
+		    xmlHttp2.open( "GET", 'get_dislike/' + picName, false );
+		    xmlHttp2.send( null );
+		    cnt2.innerHTML = xmlHttp2.responseText;
+		}
+	}
 	</script>
 	
   </head>
-  <body>
+  <body onload="init()">
     <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
@@ -62,7 +80,7 @@
 							<div class="btn-group">
 								<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
 						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-						          <p id="like_{{ file }}">0</p>
+						          <p id="like_{{ file }}" class="pic_like">0</p>
 						        </button>
 						        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
 						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
@@ -79,11 +97,11 @@
 							<div class="btn-group">
 								<button type="button" class="btn btn-primary" id="likeButton">
 						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-						          <p id="like">0</p>
+						          <p id="like_{{ file }}" class="pic_like">0</p>
 						        </button>
 						        <button type="button" class="btn btn-info" id="dislikeButton">
 						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
-						          <p id="dislike">0</p>
+						          <p id="dislike_{{ file }}">0</p>
 						        </button>
 					        </div>
 						{% endfor %}
@@ -97,11 +115,11 @@
 							<div class="btn-group">
 								<button type="button" class="btn btn-primary" id="likeButton">
 						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-						          <p id="like">0</p>
+						          <p id="like_{{ file }}" class="pic_like">0</p>
 						        </button>
 						        <button type="button" class="btn btn-info" id="dislikeButton">
 						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
-						          <p id="dislike">0</p>
+						          <p id="dislike_{{ file }}">0</p>
 						        </button>
 					        </div>
 						{% endfor %}
@@ -113,11 +131,11 @@
 							<div class="btn-group">
 								<button type="button" class="btn btn-primary" id="likeButton">
 						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-						          <p id="like">0</p>
+						          <p id="like_{{ file }}" class="pic_like">0</p>
 						        </button>
 						        <button type="button" class="btn btn-info" id="dislikeButton">
 						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
-						          <p id="dislike">0</p>
+						          <p id="dislike_{{ file }}">0</p>
 						        </button>
 					        </div>
 						{% endfor %}
