@@ -23,7 +23,8 @@
 		var xmlHttp = new XMLHttpRequest();
 	    xmlHttp.open( "GET", 'like/' + picName, false );
 	    xmlHttp.send( null );
-	    cnt.innerHTML = xmlHttp.responseText;
+	    if (xmlHttp.responseText.length<10)
+	    	cnt.innerHTML = xmlHttp.responseText;
 	}
 	
 	function dislike(picName){
@@ -32,6 +33,8 @@
 	    xmlHttp.open( "GET", 'dislike/' + picName, false );
 	    xmlHttp.send( null );
 	    cnt.innerHTML = xmlHttp.responseText;
+	    if (xmlHttp.responseText.length<10)
+	    	cnt.innerHTML = xmlHttp.responseText;
 	}
 	
 	function init(){
@@ -42,13 +45,15 @@
 			var xmlHttp1 = new XMLHttpRequest();
 		    xmlHttp1.open( "GET", 'get_like/' + picName, false );
 		    xmlHttp1.send( null );
-		    cnt1.innerHTML = xmlHttp1.responseText;
+		    if (xmlHttp1.responseText.length<10)
+		    	cnt1.innerHTML = xmlHttp1.responseText;
 		    
 		    var cnt2 = document.getElementById("dislike_" + picName);
 			var xmlHttp2 = new XMLHttpRequest();
 		    xmlHttp2.open( "GET", 'get_dislike/' + picName, false );
 		    xmlHttp2.send( null );
-		    cnt2.innerHTML = xmlHttp2.responseText;
+		    if (xmlHttp2.responseText.length<10)
+		    	cnt2.innerHTML = xmlHttp2.responseText;
 		}
 	}
 	</script>
