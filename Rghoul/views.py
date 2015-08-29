@@ -2,7 +2,10 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 from os import listdir
 from os.path import isfile, join
+import os
 import settings
+import datetime
+import time
 
 # Create your views here.
 def home(request):
@@ -15,8 +18,23 @@ def detail(request, my_args):
     return HttpResponse(str)
 
 def index(request):
-    path9 = settings.BASE_DIR + '/static/images9'
-    files9 = [ f for f in listdir(path9) if isfile(join(path9,f)) ]
-    path22 = settings.BASE_DIR + '/static/images22'
-    files22 = [ f for f in listdir(path22) if isfile(join(path22,f)) ]
-    return render_to_response('index.html', {'files9':files9, 'files22':files22})
+    ts = time.time();
+    today = datetime.datetime.fromtimestamp(ts).strftime("%Y%m%d");
+    prefix = settings.BASE_DIR + "/static/" + today
+    if not os.path.exists(prefix):
+        os.makedirs(prefix + "/lunch9")
+        os.makedirs(prefix + "/lunch22")
+        os.makedirs(prefix + "/dinner9")
+        os.makedirs(prefix + "/dinner22")
+    lunch9dir = prefix + "/lunch9"
+    lunch9 = [ f for f in listdir(lunch9dir) if isfile(join(lunch9dir,f)) ]
+    lunch22dir = prefix + "/lunch22"
+    lunch22 = [ f for f in listdir(lunch22dir) if isfile(join(lunch22dir,f)) ]
+    
+    dinner9dir = prefix + "/dinner9"
+    dinner9 = [ f for f in listdir(dinner9dir) if isfile(join(dinner9dir,f)) ]
+    dinner22dir = prefix + "/dinner22"
+    dinner22 = [ f for f in listdir(dinner22dir) if isfile(join(dinner22dir,f)) ]
+    
+    return render_to_response("index.html", {"today":today, "lunch9":lunch9, "lunch22":lunch22, 
+                                             "dinner9":dinner9, "dinner22":dinner22})
