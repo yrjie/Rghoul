@@ -1,0 +1,44 @@
+Version 1.0
+
+- create one folder for everyday, datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
+  1. use cron job
+  2. create the folders in django, if cronjob didn't create the folders
+	%Y%m%d
+	|- lunch9
+	|- lunch22
+	|- dinner9
+	|- dinner22
+
+- index loads the current folder
+	Lunch
+	|- 9th floor
+	|- 22th floor
+	Dinner
+	|- 9th floor
+	|- 22th floor
+
+- like and dislike
+  1. sqlite: id, picName, date, mealTime, floor, like, dislike
+
+superuser
+  rghoul:RghoulMars
+
+
+
+version 1.1
+
+- facebook linking
+  fingerprint: only one voting
+
+- uploader for cafeteria
+  1. investigate and use some existing web space
+  2. sftp
+  3. implement a uploading page
+  4. ask the Cafeteria to open a shared folder
+
+- general comment
+  1. mysql: id, name, title, context, time
+
+- picture compression
+
+- contact us
