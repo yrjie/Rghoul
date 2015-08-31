@@ -98,16 +98,17 @@
 					<div class="jumbotron well"><h2>Lunch@22th floor</h2></div>
 					<div class="row" id="lunch22">
 						{% for file in lunch22 %}
-							<div class="col-md-4"><img width=300 height=400 src="/static/{{ today }}/lunch22/{{ file }}"></div>
+							<div class="col-md-4"><img width=300 height=400 src="/static/{{ today }}/lunch22/{{ file }}">
 							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="likeButton">
+								<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
 						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
 						          <p id="like_{{ file }}" class="pic_like">0</p>
 						        </button>
-						        <button type="button" class="btn btn-info" id="dislikeButton">
+						        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
 						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
 						          <p id="dislike_{{ file }}">0</p>
 						        </button>
+					        </div>
 					        </div>
 						{% endfor %}
 					</div>
@@ -116,32 +117,34 @@
 			    	<div class="jumbotron well"><h2>Dinner@9th floor</h2></div>
 				    <div class="row" id="dinner9">
 						{% for file in dinner9 %}
-							<div class="col-md-4"><img width=300 height=400 src="/static/{{ today }}/dinner9/{{ file }}"></div>
+							<div class="col-md-4"><img width=300 height=400 src="/static/{{ today }}/dinner9/{{ file }}">
 							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="likeButton">
+								<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
 						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
 						          <p id="like_{{ file }}" class="pic_like">0</p>
 						        </button>
-						        <button type="button" class="btn btn-info" id="dislikeButton">
+						        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
 						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
 						          <p id="dislike_{{ file }}">0</p>
 						        </button>
+					        </div>
 					        </div>
 						{% endfor %}
 					</div>
 					<div class="jumbotron well"><h2>Dinner@22th floor</h2></div>
 					<div class="row" id="dinner22">
 						{% for file in dinner22 %}
-							<div class="col-md-4"><img width=300 height=400 src="/static/{{ today }}/dinner22/{{ file }}"></div>
+							<div class="col-md-4"><img width=300 height=400 src="/static/{{ today }}/dinner22/{{ file }}">
 							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="likeButton">
+								<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
 						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
 						          <p id="like_{{ file }}" class="pic_like">0</p>
 						        </button>
-						        <button type="button" class="btn btn-info" id="dislikeButton">
+						        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
 						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
 						          <p id="dislike_{{ file }}">0</p>
 						        </button>
+					        </div>
 					        </div>
 						{% endfor %}
 					</div>
