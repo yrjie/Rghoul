@@ -4,6 +4,7 @@ import settings
 from os.path import isfile, join
 from os import listdir
 import os
+import subprocess
 
 def getToday():
     ts = time.time();
@@ -18,6 +19,7 @@ def getFileLists():
         os.makedirs(prefix + "/lunch22")
         os.makedirs(prefix + "/dinner9")
         os.makedirs(prefix + "/dinner22")
+        subprocess.call(['chmod', '-R', '777', prefix])
         return [], [], [], []
     
     lunch9dir = prefix + "/lunch9"
