@@ -63,18 +63,25 @@ def update(request):
     
     todayD = dateutil.parser.parse(today).date()
     pics = Picture.objects.filter(date__range=(todayD, todayD))
-    if len(pics) == 0:
-        for file in lunch9:
+    cnt = 0
+    for file in lunch9:
+        if len(pics.filter(picName=file)) == 0:
             pic = Picture(picName=file, mealTime="L", floor=9, like=0, dislike=0)
             pic.save()
-        for file in lunch22:
+            cnt += 1
+    for file in lunch22:
+        if len(pics.filter(picName=file)) == 0:
             pic = Picture(picName=file, mealTime="L", floor=22, like=0, dislike=0)
             pic.save()
-        for file in dinner9:
+            cnt += 1
+    for file in dinner9:
+        if len(pics.filter(picName=file)) == 0:
             pic = Picture(picName=file, mealTime="D", floor=9, like=0, dislike=0)
             pic.save()
-        for file in dinner22:
+            cnt += 1
+    for file in dinner22:
+        if len(pics.filter(picName=file)) == 0:
             pic = Picture(picName=file, mealTime="D", floor=22, like=0, dislike=0)
             pic.save()
-        return HttpResponse("INFO: updated successfully")
-    return HttpResponse("INFO: already updated")
+            cnt += 1
+    return HttpResponse("INFO: updated %d pictures" % cnt)
