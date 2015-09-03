@@ -1,6 +1,6 @@
 #!/bin/bash
 
-staticDir=static
+staticDir=static/data
 
 today=`date +"%Y%m%d"`
 mkdir -p $staticDir/$today/lunch9
