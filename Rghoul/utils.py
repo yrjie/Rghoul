@@ -11,9 +11,12 @@ def getToday():
     today = datetime.datetime.fromtimestamp(ts).strftime("%Y%m%d");
     return today
 
-def getFileLists():
-    today = getToday()
-    prefix = settings.BASE_DIR + "/static/" + today
+def getFileLists(date=None):
+    if date==None:
+        today = getToday()
+    else:
+        today = date
+    prefix = settings.BASE_DIR + "/static/data/" + today
     if not os.path.exists(prefix):  # make sure index will show properly
         os.makedirs(prefix + "/lunch9")
         os.makedirs(prefix + "/lunch22")
@@ -32,3 +35,7 @@ def getFileLists():
     dinner22dir = prefix + "/dinner22"
     dinner22 = [ f for f in listdir(dinner22dir) if isfile(join(dinner22dir,f)) ]
     return lunch9, lunch22, dinner9, dinner22
+
+def getDateList():
+    dataDir = settings.BASE_DIR + "/static/data/"
+    return sorted([d for d in listdir(dataDir)], reverse=True)[0:10]

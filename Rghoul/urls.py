@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^like/(?P<name>.+)/$', views.like),
     url(r'^dislike/(?P<name>.+)/$', views.dislike),
     url(r'^update/$', views.update),
+    url(r'^date/(?P<date>.+)/$', views.onDate),
 
     url(r'^admin/', include(admin.site.urls)),
 ) #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

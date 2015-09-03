@@ -19,9 +19,16 @@ def detail(request, my_args):
 def index(request):
     today = utils.getToday()
     lunch9, lunch22, dinner9, dinner22 = utils.getFileLists()
-    return render_to_response("index.html", {"today":today, "lunch9":lunch9, "lunch22":lunch22, 
+    folders = utils.getDateList()
+    return render_to_response("index.html", {"folders":folders, "today":today, "lunch9":lunch9, "lunch22":lunch22, 
                                              "dinner9":dinner9, "dinner22":dinner22})
-    
+
+def onDate(request, date):
+    lunch9, lunch22, dinner9, dinner22 = utils.getFileLists(date)
+    folders = utils.getDateList()
+    return render_to_response("index.html", {"folders":folders, "today":date, "lunch9":lunch9, "lunch22":lunch22, 
+                                             "dinner9":dinner9, "dinner22":dinner22})
+
 def getLike(request, name):
     rs = Picture.objects.filter(picName = name)
     ret = 0
@@ -56,7 +63,7 @@ def dislike(request, name):
 
 def update(request):
     today = utils.getToday()
-    prefix = settings.BASE_DIR + "/static/" + today
+    prefix = settings.BASE_DIR + "/static/data/" + today
     if not os.path.exists(prefix):
         return HttpResponse("ERROR: today's pictures are not uploaded.")
     lunch9, lunch22, dinner9, dinner22 = utils.getFileLists()
