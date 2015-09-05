@@ -5,6 +5,7 @@ import settings
 import utils
 from models import Picture
 import dateutil.parser
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def home(request):
@@ -16,6 +17,7 @@ def detail(request, my_args):
         % (post.title, post.category, post.date_time, post.content))
     return HttpResponse(str)
 
+@csrf_exempt
 def onDate(request, date = None):
     if date == None:
         date = utils.getToday()
@@ -54,6 +56,7 @@ def onDate(request, date = None):
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt})
 
+# Not use now
 def getLike(request, name):
     rs = Picture.objects.filter(picName = name)
     ret = 0
@@ -61,6 +64,7 @@ def getLike(request, name):
         ret = pic.like
     return HttpResponse(ret)
 
+# Not use now
 def getDislike(request, name):
     rs = Picture.objects.filter(picName = name)
     ret = 0
@@ -85,6 +89,12 @@ def dislike(request, name):
         ret = pic.dislike
         pic.save()
     return HttpResponse(ret)
+
+@csrf_exempt
+def comment(request, date = None):
+    print date
+    print request.POST
+    return HttpResponse(0)
 
 def update(request):
     today = utils.getToday()

@@ -14,8 +14,16 @@ class Picture(models.Model):
     floor = models.IntegerField()
     like = models.IntegerField()
     dislike = models.IntegerField()
-    
+
     def __unicode__(self):
         return self.picName
 
-# class Comment(models.Model):
+class Comment(models.Model):
+	id = models.AutoField(primary_key=True)
+	author = models.CharField(max_length=255)
+	context = models.CharField(max_length=2047)
+	parent = models.CharField(max_length=10) # parent page: the date
+	date = models.DateField(auto_now_add=True)
+
+	def __unicode__(self):
+		return self.context
