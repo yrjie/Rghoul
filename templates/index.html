@@ -36,132 +36,108 @@
 	    if (xmlHttp.responseText.length<10)
 	    	cnt.innerHTML = xmlHttp.responseText;
 	}
-	
-	function init(){
-		var likes = document.getElementsByClassName("pic_like")
-		for (var i=0; i<likes.length; i++){
-			picName = likes[i].id.replace('like_', '');
-			var cnt1 = document.getElementById("like_" + picName);
-			var xmlHttp1 = new XMLHttpRequest();
-		    xmlHttp1.open( "GET", '/get_like/' + picName + '/', false );
-		    xmlHttp1.send( null );
-		    if (xmlHttp1.responseText.length<10)
-		    	cnt1.innerHTML = xmlHttp1.responseText;
-		    
-		    var cnt2 = document.getElementById("dislike_" + picName);
-			var xmlHttp2 = new XMLHttpRequest();
-		    xmlHttp2.open( "GET", '/get_dislike/' + picName + '/', false );
-		    xmlHttp2.send( null );
-		    if (xmlHttp2.responseText.length<10)
-		    	cnt2.innerHTML = xmlHttp2.responseText;
-		}
-	}
 	</script>
 	
   </head>
   <body>
     <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<nav class="navbar navbar-default navbar-inverse" role="navigation">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-					 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-				</button><a class="navbar-brand" href="/">楽天喰種</a>
-				
-				<div class="collapse navbar-collapse" id="navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li class="active"><a data-toggle="tab" href="#lunch">Lunch</a></li>
-						<li><a data-toggle="tab" href="#dinner">Dinner</a></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">History<strong class="caret"></strong></a>
-							<ul class="dropdown-menu">
-							{% for date in folders %}
-								<li>
-									<a href="/date/{{ date }}/">{{ date }}</a>
-								</li>
-							{% endfor %}
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</nav>
+		<nav class="navbar navbar-default navbar-inverse" role="navigation">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+				 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+			</button><a class="navbar-brand" href="/">楽天喰種</a>
 			
-			<div class="tab-content">
-			    <div id="lunch" class="tab-pane fade in active">
-			    	<div class="jumbotron well"><h2>Lunch@9th floor</h2></div>
-				    <div class="row" id="lunch9">
-						{% for file, cnt in lunch9cnt.items %}
-							<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/lunch9/{{ file }}">
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
-						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-						          <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
-						        </button>
-						        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
-						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
-						          <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
-						        </button>
-					        </div>
-					        </div>
+			<div class="collapse navbar-collapse" id="navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a data-toggle="tab" href="#lunch">Lunch</a></li>
+					<li><a data-toggle="tab" href="#dinner">Dinner</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">History<strong class="caret"></strong></a>
+						<ul class="dropdown-menu">
+						{% for date in folders %}
+							<li>
+								<a href="/date/{{ date }}/">{{ date }}</a>
+							</li>
 						{% endfor %}
-					</div>
-					<div class="jumbotron well"><h2>Lunch@22th floor</h2></div>
-					<div class="row" id="lunch22">
-						{% for file, cnt in lunch22cnt.items %}
-							<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/lunch22/{{ file }}">
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
-						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-						          <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
-						        </button>
-						        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
-						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
-						          <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
-						        </button>
-					        </div>
-					        </div>
-						{% endfor %}
-					</div>
-			    </div>
-			    <div id="dinner" class="tab-pane fade">
-			    	<div class="jumbotron well"><h2>Dinner@9th floor</h2></div>
-				    <div class="row" id="dinner9">
-						{% for file, cnt in dinner9cnt.items %}
-							<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/dinner9/{{ file }}">
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
-						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-						          <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
-						        </button>
-						        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
-						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
-						          <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
-						        </button>
-					        </div>
-					        </div>
-						{% endfor %}
-					</div>
-					<div class="jumbotron well"><h2>Dinner@22th floor</h2></div>
-					<div class="row" id="dinner22">
-						{% for file, cnt in dinner22cnt.items %}
-							<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/dinner22/{{ file }}">
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
-						          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-						          <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
-						        </button>
-						        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
-						          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
-						          <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
-						        </button>
-					        </div>
-					        </div>
-						{% endfor %}
-					</div>
-			    </div>
+						</ul>
+					</li>
+				</ul>
 			</div>
+		</nav>
+		
+		<div class="tab-content">
+		    <div id="lunch" class="tab-pane fade in active">
+		    	<div class="jumbotron well"><h2>Lunch@9th floor</h2></div>
+			    <div class="row" id="lunch9">
+					{% for file, cnt in lunch9cnt.items %}
+						<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/lunch9/{{ file }}">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
+					          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
+					          <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
+					        </button>
+					        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
+					          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
+					          <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
+					        </button>
+				        </div>
+				        </div>
+					{% endfor %}
+				</div>
+				<div class="jumbotron well"><h2>Lunch@22th floor</h2></div>
+				<div class="row" id="lunch22">
+					{% for file, cnt in lunch22cnt.items %}
+						<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/lunch22/{{ file }}">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
+					          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
+					          <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
+					        </button>
+					        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
+					          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
+					          <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
+					        </button>
+				        </div>
+				        </div>
+					{% endfor %}
+				</div>
+		    </div>
+		    <div id="dinner" class="tab-pane fade">
+		    	<div class="jumbotron well"><h2>Dinner@9th floor</h2></div>
+			    <div class="row" id="dinner9">
+					{% for file, cnt in dinner9cnt.items %}
+						<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/dinner9/{{ file }}">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
+					          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
+					          <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
+					        </button>
+					        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
+					          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
+					          <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
+					        </button>
+				        </div>
+				        </div>
+					{% endfor %}
+				</div>
+				<div class="jumbotron well"><h2>Dinner@22th floor</h2></div>
+				<div class="row" id="dinner22">
+					{% for file, cnt in dinner22cnt.items %}
+						<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/dinner22/{{ file }}">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="likeButton" onclick = "like('{{ file }}')">
+					          <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
+					          <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
+					        </button>
+					        <button type="button" class="btn btn-info" id="dislikeButton" onclick = "dislike('{{ file }}')">
+					          <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
+					          <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
+					        </button>
+				        </div>
+				        </div>
+					{% endfor %}
+				</div>
+		    </div>
 		</div>
-	</div>
 	</div>
 
 	<script>
