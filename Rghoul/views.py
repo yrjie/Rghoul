@@ -16,18 +16,43 @@ def detail(request, my_args):
         % (post.title, post.category, post.date_time, post.content))
     return HttpResponse(str)
 
-def index(request):
-    today = utils.getToday()
-    lunch9, lunch22, dinner9, dinner22 = utils.getFileLists()
-    folders = utils.getDateList()
-    return render_to_response("index.html", {"folders":folders, "today":today, "lunch9":lunch9, "lunch22":lunch22, 
-                                             "dinner9":dinner9, "dinner22":dinner22})
-
-def onDate(request, date):
+def onDate(request, date = None):
+    if date == None:
+        date = utils.getToday()
     lunch9, lunch22, dinner9, dinner22 = utils.getFileLists(date)
+    lunch9cnt, lunch22cnt, dinner9cnt, dinner22cnt = {}, {}, {}, {}
     folders = utils.getDateList()
-    return render_to_response("index.html", {"folders":folders, "today":date, "lunch9":lunch9, "lunch22":lunch22, 
-                                             "dinner9":dinner9, "dinner22":dinner22})
+    for file in lunch9:
+        rs = Picture.objects.filter(picName = file)
+        cnt = [0, 0]
+        for pic in rs:
+            cnt[0] = pic.like
+            cnt[1] = pic.dislike
+        lunch9cnt[file] = cnt
+    for file in lunch22:
+        rs = Picture.objects.filter(picName = file)
+        cnt = [0, 0]
+        for pic in rs:
+            cnt[0] = pic.like
+            cnt[1] = pic.dislike
+        lunch22cnt[file] = cnt
+    for file in dinner9:
+        rs = Picture.objects.filter(picName = file)
+        cnt = [0, 0]
+        for pic in rs:
+            cnt[0] = pic.like
+            cnt[1] = pic.dislike
+        dinner9cnt[file] = cnt
+    for file in dinner22:
+        rs = Picture.objects.filter(picName = file)
+        cnt = [0, 0]
+        for pic in rs:
+            cnt[0] = pic.like
+            cnt[1] = pic.dislike
+        dinner22cnt[file] = cnt
+    return render_to_response("index.html", {"folders":folders, "date":date, 
+                                             "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
+                                             "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt})
 
 def getLike(request, name):
     rs = Picture.objects.filter(picName = name)
