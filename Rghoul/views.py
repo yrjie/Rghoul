@@ -101,7 +101,10 @@ def comment(request, date = None):
             ipNum = utils.getClientIp(request).split(".")
             ipNum[3] = "*"
             author = ".".join(ipNum)
-        res = "<dt>%s</dt>\r\n" % author
+        if author == "admin@mars":
+            res = "<dt><font color=\"orange\">%s</font></dt>\r\n" % "admin"
+        else:
+            res = "<dt>%s</dt>\r\n" % author
         context = request.POST["context"].replace('\r\n', '\n')
         for line in context.split("\n"):
             res += "<dd>%s</dd>\r\n" % line
@@ -112,7 +115,6 @@ def comment(request, date = None):
         parent = utils.getToday()
         if len(pathItem)>=4:
             parent = pathItem[2]
-        print res
         cmt = Comment(author=author, context=res, parent=parent)
         cmt.save()
     return HttpResponse(res)
