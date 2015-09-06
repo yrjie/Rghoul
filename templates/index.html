@@ -8,7 +8,7 @@
 	<title>It's lunch time! | Rakuten Ghoul </title>
 
 	<meta name="description" content="Rakuten Ghoul">
-	<meta name="author" content="Yang Ruijie|Charlie">
+	<meta name="author" content="Yang Ruijie | Charlie">
 
 	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/static/css/style.css" rel="stylesheet">
@@ -117,13 +117,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="jumbotron well-sm"><h2>Just Chat It!</h2></div>
+		<div class="jumbotron well-sm"><h2>GhoulChat</h2></div>
 		<dl class="dl-horizontal" id="allComments">
-			<dt>Description lists</dt>
-			<dd>A description list is perfect for defining terms.</dd>
-			<dd>Donec id elit non mi porta gravida at eget metus.</dd>
-			<dt>Euismod</dt>
-			<dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
+			{% for cmt in cmts %}
+				{{ cmt.context | safe}}
+			{% endfor %}
 		</dl>
 		<form class="form-horizontal" id="cmtForm" method="POST" action="comment/">
 			<div class="form-group">
@@ -135,7 +133,7 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label">Comment</label>
 				<div class="col-sm-3">
-					<textarea class="form-control" name="content" row=5 placeholder="Feel free to talk anything..."></textarea>
+					<textarea class="form-control" name="context" row=5 placeholder="Enjoyed your dish?"></textarea>
 				</div>
 			</div>
 			<div class="form-group">
@@ -157,6 +155,7 @@
 	            success: function (data) {
 	                var cmts = document.getElementById("allComments");
 	                cmts.innerHTML = cmts.innerHTML + data;
+	                frm[0].reset();
 	            }
 	        });
 	        ev.preventDefault();

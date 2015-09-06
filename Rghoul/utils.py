@@ -11,6 +11,11 @@ def getToday():
     today = datetime.datetime.fromtimestamp(ts).strftime("%Y%m%d");
     return today
 
+def getNow():
+    ts = time.time();
+    now = datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S");
+    return now
+
 def getFileLists(date=None):
     if date==None:
         today = getToday()
@@ -39,3 +44,11 @@ def getFileLists(date=None):
 def getDateList():
     dataDir = settings.BASE_DIR + "/static/data/"
     return sorted([d for d in listdir(dataDir)], reverse=True)[0:10]
+
+def getClientIp(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

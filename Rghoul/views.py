@@ -3,7 +3,7 @@ from django.http import HttpResponse
 import os
 import settings
 import utils
-from models import Picture
+from models import Picture, Comment
 import dateutil.parser
 from django.views.decorators.csrf import csrf_exempt
 
@@ -17,7 +17,6 @@ def detail(request, my_args):
         % (post.title, post.category, post.date_time, post.content))
     return HttpResponse(str)
 
-@csrf_exempt
 def onDate(request, date = None):
     if date == None:
         date = utils.getToday()
@@ -52,9 +51,11 @@ def onDate(request, date = None):
             cnt[0] = pic.like
             cnt[1] = pic.dislike
         dinner22cnt[file] = cnt
+    cmts = Comment.objects.filter(parent = date)
     return render_to_response("index.html", {"folders":folders, "date":date, 
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
-                                             "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt})
+                                             "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
+                                             "cmts":cmts})
 
 # Not use now
 def getLike(request, name):
@@ -92,9 +93,29 @@ def dislike(request, name):
 
 @csrf_exempt
 def comment(request, date = None):
-    print date
-    print request.POST
-    return HttpResponse(0)
+    res = ""
+    if request.POST.has_key("context") and len(request.POST["context"])>0:
+        maxLen = Comment._meta.get_field('context').max_length
+        author = request.POST["author"]
+        if len(author) == 0:
+            ipNum = utils.getClientIp(request).split(".")
+            ipNum[3] = "*"
+            author = ".".join(ipNum)
+        res = "<dt>%s</dt>\r\n" % author
+        context = request.POST["context"].replace('\r\n', '\n')
+        for line in context.split("\n"):
+            res += "<dd>%s</dd>\r\n" % line
+        now = utils.getNow()
+        res += "<dd><i>&nbsp;&nbsp;&nbsp;&nbsp;posted at %s</i></dd>" % now
+        res = res[0:maxLen]
+        pathItem = request.path.split("/")
+        parent = utils.getToday()
+        if len(pathItem)>=4:
+            parent = pathItem[2]
+        print res
+        cmt = Comment(author=author, context=res, parent=parent)
+        cmt.save()
+    return HttpResponse(res)
 
 def update(request):
     today = utils.getToday()
