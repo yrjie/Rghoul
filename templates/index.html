@@ -133,7 +133,7 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label">Comment</label>
 				<div class="col-sm-3">
-					<textarea class="form-control" name="context" row=5 placeholder="Enjoyed your dish?"></textarea>
+					<textarea class="form-control" id="context0" name="context" row=5 placeholder="Enjoyed your dish?"></textarea>
 				</div>
 			</div>
 			<div class="form-group">
@@ -148,6 +148,11 @@
 	<script type="text/javascript">
 	    var frm = $("#cmtForm");
 	    frm.submit(function (ev) {
+	    	var ctx = document.getElementById("context0").value;
+			if (ctx.length==0){
+				alert("Hey dude, say something :)");
+				return false;
+			}
 	        $.ajax({
 	            type: frm.attr("method"),
 	            url: frm.attr("action"),
