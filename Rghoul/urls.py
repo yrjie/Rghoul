@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^comment/$', views.comment),
     url(r'^date/(?P<date>[0-9]+)/comment/$', views.comment),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^thisisadmin/', include(admin.site.urls)),
 ) #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # urlpatterns += staticfiles_urlpatterns()
