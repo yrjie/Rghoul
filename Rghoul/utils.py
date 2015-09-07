@@ -23,11 +23,12 @@ def getFileLists(date=None):
         today = date
     prefix = settings.BASE_DIR + "/static/data/" + today
     if not os.path.exists(prefix):  # make sure index will show properly
-        os.makedirs(prefix + "/lunch9")
-        os.makedirs(prefix + "/lunch22")
-        os.makedirs(prefix + "/dinner9")
-        os.makedirs(prefix + "/dinner22")
-        subprocess.call(['chmod', '-R', '777', prefix])
+        if today == getToday():
+            os.makedirs(prefix + "/lunch9")
+            os.makedirs(prefix + "/lunch22")
+            os.makedirs(prefix + "/dinner9")
+            os.makedirs(prefix + "/dinner22")
+            subprocess.call(['chmod', '-R', '777', prefix])
         return [], [], [], []
     
     lunch9dir = prefix + "/lunch9"
