@@ -96,7 +96,7 @@ def comment(request, date = None):
     res = ""
     if request.POST.has_key("context") and len(request.POST["context"])>0:
         maxLen = Comment._meta.get_field('context').max_length
-        author = request.POST["author"]
+        author = request.POST["author"].replace("<", "&lt;").replace(">", "&gt;")
         if len(author) == 0:
             ipNum = utils.getClientIp(request).split(".")
             ipNum[3] = "*"
@@ -105,7 +105,7 @@ def comment(request, date = None):
             res = "<dt><font color=\"orange\">%s</font></dt>\r\n" % "admin"
         else:
             res = "<dt>%s</dt>\r\n" % author
-        context = request.POST["context"].replace('\r\n', '\n')
+        context = request.POST["context"].replace("\r\n", "\n").replace("<", "&lt;").replace(">", "&gt;")
         for line in context.split("\n"):
             res += "<dd>%s</dd>\r\n" % line
         now = utils.getNow()
