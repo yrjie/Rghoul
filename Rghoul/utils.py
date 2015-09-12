@@ -5,6 +5,7 @@ from os.path import isfile, join
 from os import listdir
 import os
 import subprocess
+import pytz
 
 def getToday():
     ts = time.time();
@@ -54,4 +55,8 @@ def getClientIp(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-pdatetml = "\r\n<dd class=\"posttime\">posted at %s</dd>"
+def getPdate(date):
+    pdatetml = "\r\n<dd class=\"posttime\">posted at %s</dd>"
+    tky = pytz.timezone("Asia/Tokyo")
+    now = date.astimezone(tky).strftime("%Y-%m-%d %H:%M:%S")
+    return pdatetml % now

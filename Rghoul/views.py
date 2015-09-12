@@ -54,8 +54,7 @@ def onDate(request, date = None):
     cmts = []
     allcmts = Comment.objects.order_by("-id")
     for x in allcmts:
-        now = x.date.strftime("%Y-%m-%d %H:%M:%S")
-        cmts.append(x.context + utils.pdatetml % now)
+        cmts.append(x.context + utils.getPdate(x.date))
     return render_to_response("index.html", {"folders":folders, "date":date, 
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
@@ -117,8 +116,7 @@ def comment(request, date = None):
         parent = utils.getToday()
         cmt = Comment(author=author, context=context, parent=parent)
         cmt.save()
-        now = cmt.date.strftime("%Y-%m-%d %H:%M:%S")
-        res += utils.pdatetml % now
+        res += utils.getPdate(cmt.date)
     return HttpResponse(res)
 
 def update(request):
