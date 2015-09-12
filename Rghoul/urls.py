@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^date/(?P<date>[0-9]+)/$', views.onDate),
     url(r'^comment/$', views.comment),
     url(r'^date/(?P<date>[0-9]+)/comment/$', views.comment),
-    # url(r'^favicon.ico')
+    url(r'^favicon.ico$', views.favicon),
 
     url(r'^thisisadmin/', include(admin.site.urls)),
 ) #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

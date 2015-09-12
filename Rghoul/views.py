@@ -6,6 +6,7 @@ import utils
 from models import Picture, Comment
 import dateutil.parser
 from django.views.decorators.csrf import csrf_exempt
+from django.views.static import serve
 
 # Create your views here.
 def home(request):
@@ -159,3 +160,7 @@ def update(request):
             pic.save()
             cnt += 1
     return HttpResponse("INFO: updated %d pictures" % cnt)
+
+def favicon(request):
+    filepath = settings.BASE_DIR + "/static/favicon.ico"
+    return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
