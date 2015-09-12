@@ -51,7 +51,7 @@ def onDate(request, date = None):
             cnt[0] = pic.like
             cnt[1] = pic.dislike
         dinner22cnt[file] = cnt
-    cmts = Comment.objects.filter(parent = date)
+    cmts = Comment.objects.order_by("-id")
     return render_to_response("index.html", {"folders":folders, "date":date, 
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
@@ -111,10 +111,10 @@ def comment(request, date = None):
         now = utils.getNow()
         res += "<dd><i>&nbsp;&nbsp;&nbsp;&nbsp;posted at %s</i></dd>" % now
         res = res[0:maxLen]
-        pathItem = request.path.split("/")
         parent = utils.getToday()
-        if len(pathItem)>=4:
-            parent = pathItem[2]
+        # pathItem = request.path.split("/")
+        # if len(pathItem)>=4:
+        #     parent = pathItem[2]
         cmt = Comment(author=author, context=res, parent=parent)
         cmt.save()
     return HttpResponse(res)
