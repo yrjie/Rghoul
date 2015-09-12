@@ -12,4 +12,4 @@ find $1 -name '*.JPG' -exec convert -resize 600x800 {} {} \;
 find $1 -name '.DS_Store' -exec rm {} \;
 scp -r $1 azureuser@gcsdJP:~/Rghoul/static/data/
 #curl http://rakuten-ghoul.xyz/update/
-curl http://gcsd-id-mars-japan.cloudapp.net/update/
+curl http://gcsd-id-mars-japan.cloudapp.net/thisisupdate/
