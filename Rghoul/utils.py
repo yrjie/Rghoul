@@ -53,3 +53,5 @@ def getClientIp(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+pdatetml = "\r\n<dd class=\"posttime\">posted at %s</dd>"

@@ -51,7 +51,11 @@ def onDate(request, date = None):
             cnt[0] = pic.like
             cnt[1] = pic.dislike
         dinner22cnt[file] = cnt
-    cmts = Comment.objects.order_by("-id")
+    cmts = []
+    allcmts = Comment.objects.order_by("-id")
+    for x in allcmts:
+        now = x.date.strftime("%Y-%m-%d %H:%M:%S")
+        cmts.append(x.context + utils.pdatetml % now)
     return render_to_response("index.html", {"folders":folders, "date":date, 
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
@@ -102,21 +106,19 @@ def comment(request, date = None):
             ipNum[3] = "*"
             author = ".".join(ipNum)
         if author == "admin@mars":
-            res = "<dt><font color=\"orange\">%s</font></dt>\r\n" % "admin"
+            res = "<dt><font color=\"orange\">%s</font></dt>" % "admin"
         else:
-            res = "<dt>%s</dt>\r\n" % author
+            res = "<dt>%s</dt>" % author
         context = request.POST["context"].replace("\r\n", "\n").replace("<", "&lt;").replace(">", "&gt;")
         for line in context.split("\n"):
-            res += "<dd>%s</dd>\r\n" % line
-        now = utils.getNow()
-        res += "<dd><i>&nbsp;&nbsp;&nbsp;&nbsp;posted at %s</i></dd>" % now
-        res = res[0:maxLen]
+            res += "\r\n<dd>%s</dd>" % line
+        res = res[0:maxLen-55]
+        context = res
         parent = utils.getToday()
-        # pathItem = request.path.split("/")
-        # if len(pathItem)>=4:
-        #     parent = pathItem[2]
-        cmt = Comment(author=author, context=res, parent=parent)
+        cmt = Comment(author=author, context=context, parent=parent)
         cmt.save()
+        now = cmt.date.strftime("%Y-%m-%d %H:%M:%S")
+        res += utils.pdatetml % now
     return HttpResponse(res)
 
 def update(request):

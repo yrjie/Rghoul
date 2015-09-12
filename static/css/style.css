@@ -2,3 +2,8 @@
     background-clip: padding-box;
     border-bottom: 20px solid transparent;
 }
+
+.posttime {
+    border-left: 50px solid transparent;
+    font-style: italic;
+}

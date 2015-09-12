@@ -19,11 +19,21 @@ class Picture(models.Model):
         return self.picName
 
 class Comment(models.Model):
-	id = models.AutoField(primary_key=True)
-	author = models.CharField(max_length=255)
-	context = models.CharField(max_length=2047)
-	parent = models.CharField(max_length=10) # parent page: the date
-	date = models.DateField(auto_now_add=True)
+    id = models.AutoField(primary_key=True)
+    author = models.CharField(max_length=255)
+    context = models.CharField(max_length=2047)
+    parent = models.CharField(max_length=10) # parent page: the date
+    date = models.DateTimeField(auto_now_add=True)
 
-	def __unicode__(self):
-		return self.context
+    def __unicode__(self):
+        return self.context
+
+# class Comment0(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     author = models.CharField(max_length=255)
+#     context = models.CharField(max_length=2047)
+#     parent = models.CharField(max_length=10) # parent page: the date
+#     date = models.DateField(auto_now_add=True)
+
+#     def __unicode__(self):
+#         return self.context
