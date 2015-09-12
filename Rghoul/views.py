@@ -51,6 +51,7 @@ def onDate(request, date = None):
             cnt[0] = pic.like
             cnt[1] = pic.dislike
         dinner22cnt[file] = cnt
+    hasDinner = dinner9cnt or dinner22cnt
     cmts = []
     allcmts = Comment.objects.order_by("-id")[0:50]
     groupSize = 10
@@ -66,7 +67,7 @@ def onDate(request, date = None):
     return render_to_response("index.html", {"folders":folders, "date":date, 
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
-                                             "cmts":cmts})
+                                             "cmts":cmts, "hasDinner":hasDinner})
 
 # Not use now
 def getLike(request, name):
