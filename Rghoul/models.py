@@ -27,5 +27,3 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return self.context
-
-# test git
