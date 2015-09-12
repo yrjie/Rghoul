@@ -1,4 +1,9 @@
 #!/bin/bash
+if [[ $# < 1 || ($1 != "lunch" && $1 != "dinner") ]]
+then
+    echo 'Usage: [lunch, dinner]'
+    exit
+fi
 
 staticDir=static/data
 
@@ -10,5 +15,5 @@ mkdir -p $staticDir/$today/dinner22
 
 root="/Volumes/NO NAME/DCIM"
 folder=`ls -t "$root"|head -n1`
-find "$root/$folder" -mtime 1 -exec cp {} $staticDir/$today/lunch9/ \;
+find "$root/$folder" -mtime 1h -exec cp {} $staticDir/$today/${1}9/ \;
 #find "$root/$folder" -mtime 1 -exec cp {} /tmp/test/ \;
