@@ -52,9 +52,17 @@ def onDate(request, date = None):
             cnt[1] = pic.dislike
         dinner22cnt[file] = cnt
     cmts = []
-    allcmts = Comment.objects.order_by("-id")
-    for x in allcmts:
-        cmts.append(x.context + utils.getPdate(x.date))
+    allcmts = Comment.objects.order_by("-id")[0:50]
+    groupSize = 10
+    group = []
+    for i, x in enumerate(allcmts):
+        if i%groupSize == 0:
+            if i>0:
+                cmts.append(group)
+            group = []
+        group.append(x.context + utils.getPdate(x.date))
+    if group:
+        cmts.append(group)
     return render_to_response("index.html", {"folders":folders, "date":date, 
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,

@@ -138,10 +138,23 @@
 			</div>
 		</form>
 		<dl class="dl-horizontal" id="allComments">
-			{% for cmt in cmts %}
-				{{ cmt | safe}}
+			<div class="tab-content">
+			{% for cmtg in cmts %}
+				<div id="cmt{{ forloop.counter }}" class="tab-pane fade{% if forloop.counter == 1 %} in active{% endif %}">
+				{% for cmt in cmtg %}
+					{{ cmt | safe}}
+				{% endfor %}
+				</div>
 			{% endfor %}
+			</div>
 		</dl>
+		<div class="col-sm-offset-1 col-sm-10">
+			<ul class="pagination  pagination-lg" id="pgTabs">
+			{% for cmtg in cmts %}
+				<li{% if forloop.counter == 1 %} class="active"{% endif %}><a data-toggle="tab" href="#cmt{{ forloop.counter }}">{{ forloop.counter }}</a></li>
+			{% endfor %}
+			</ul>
+		</div>
 	</div>
 
 	<script type="text/javascript">
@@ -157,8 +170,9 @@
 	            url: frm.attr("action"),
 	            data: frm.serialize(),
 	            success: function (data) {
-	                var cmts = document.getElementById("allComments");
-	                cmts.innerHTML = data + cmts.innerHTML;
+	                var cmt1 = document.getElementById("cmt1");
+	                cmt1.innerHTML = data + cmt1.innerHTML;
+	                $('#pgTabs a[href="#cmt1"]').tab('show');
 	                frm[0].reset();
 	            }
 	        });
