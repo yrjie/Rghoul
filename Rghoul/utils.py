@@ -60,3 +60,5 @@ def getPdate(date):
     tky = tz.gettz("Asia/Tokyo")
     now = date.astimezone(tky).strftime("%Y-%m-%d %H:%M:%S")
     return pdatetml % now
+
+notFound = "<h1>Not Found</h1><p>The requested URL %s was not found on this server.</p>"

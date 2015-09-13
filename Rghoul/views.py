@@ -1,5 +1,5 @@
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 import os
 import settings
 import utils
@@ -18,9 +18,11 @@ def detail(request, my_args):
         % (post.title, post.category, post.date_time, post.content))
     return HttpResponse(str)
 
-def onDate(request, date = None):
+def onDate(request, date = None, page = None):
     if date == None:
         date = utils.getToday()
+    if page and page!="lunch" and page!="dinner":
+        return HttpResponseNotFound(utils.notFound % request.path_info)
     lunch9, lunch22, dinner9, dinner22 = utils.getFileLists(date)
     lunch9cnt, lunch22cnt, dinner9cnt, dinner22cnt = {}, {}, {}, {}
     folders = utils.getDateList()
@@ -52,7 +54,11 @@ def onDate(request, date = None):
             cnt[0] = pic.like
             cnt[1] = pic.dislike
         dinner22cnt[file] = cnt
-    hasDinner = dinner9cnt or dinner22cnt
+    showDinner = dinner9cnt or dinner22cnt
+    if page=="lunch":
+        showDinner = False
+    elif page=="dinner":
+        showDinner = True
     cmts = []
     allcmts = Comment.objects.order_by("-id")[0:50]
     groupSize = 10
@@ -68,7 +74,7 @@ def onDate(request, date = None):
     return render_to_response("index.html", {"folders":folders, "date":date, 
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
-                                             "cmts":cmts, "hasDinner":hasDinner})
+                                             "cmts":cmts, "showDinner":showDinner})
 
 # Not use now
 def getLike(request, name):
@@ -108,7 +114,7 @@ def dislike(request, name):
 def comment(request, date = None):
     res = ""
     if request.POST.has_key("context") and len(request.POST["context"])>0:
-        maxLen = Comment._meta.get_field('context').max_length
+        maxLen = Comment._meta.get_field("context").max_length
         author = request.POST["author"].replace("<", "&lt;").replace(">", "&gt;")
         if len(author) == 0:
             ipNum = utils.getClientIp(request).split(".")
@@ -164,3 +170,7 @@ def update(request):
 def favicon(request):
     filepath = settings.BASE_DIR + "/static/favicon.ico"
     return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
+
+def bookmark(request):
+    folders = utils.getDateList()
+    return render_to_response("bookmark.html", {"folders":folders})
