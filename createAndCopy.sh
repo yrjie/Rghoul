@@ -17,3 +17,4 @@ root="/Volumes/NO NAME/DCIM"
 folder=`ls -t "$root"|head -n1`
 find "$root/$folder" -cmin -90 -exec cp -v {} $staticDir/$today/${1}9/ \;
 #find "$root/$folder" -mtime 1 -exec cp {} /tmp/test/ \;
+#git test
