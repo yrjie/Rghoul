@@ -53,8 +53,8 @@
 				<div class="jumbotron well"><h2>Lunch@9th floor</h2></div>
 				<div class="row" id="lunch9">
 					{% for file, cnt in lunch9cnt.items %}
-					<div class="col-sm-6 col-md-4 col-lg-3"><img class="menu-photo" src="/static/data/{{ date }}/lunch9/{{ file }}">
-						<div class="btn-group judge">
+					<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/lunch9/{{ file }}">
+						<div class="btn-group">
 							<button type="button" class="btn btn-primary" onclick = "like('{{ file }}')">
 								<span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
 								<p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
@@ -70,8 +70,8 @@
 				<div class="jumbotron well"><h2>Lunch@22nd floor</h2></div>
 				<div class="row" id="lunch22">
 					{% for file, cnt in lunch22cnt.items %}
-					<div class="col-sm-6 col-md-4 col-lg-3"><img class="menu-photo" src="/static/data/{{ date }}/lunch22/{{ file }}">
-						<div class="btn-group judge">
+					<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/lunch22/{{ file }}">
+						<div class="btn-group">
 							<button type="button" class="btn btn-primary" onclick = "like('{{ file }}')">
 								<span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
 								<p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
@@ -89,8 +89,8 @@
 				<div class="jumbotron well"><h2>Dinner@9th floor</h2></div>
 				<div class="row" id="dinner9">
 					{% for file, cnt in dinner9cnt.items %}
-					<div class="col-sm-6 col-md-4 col-lg-3"><img class="menu-photo" src="/static/data/{{ date }}/dinner9/{{ file }}">
-						<div class="btn-group judge">
+					<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/dinner9/{{ file }}">
+						<div class="btn-group">
 							<button type="button" class="btn btn-primary" onclick = "like('{{ file }}')">
 								<span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
 								<p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
@@ -106,8 +106,8 @@
 				<div class="jumbotron well"><h2>Dinner@22nd floor</h2></div>
 				<div class="row" id="dinner22">
 					{% for file, cnt in dinner22cnt.items %}
-					<div class="col-sm-6 col-md-4 col-lg-3"><img class="menu-photo" src="/static/data/{{ date }}/dinner22/{{ file }}">
-						<div class="btn-group judge">
+					<div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/dinner22/{{ file }}">
+						<div class="btn-group">
 							<button type="button" class="btn btn-primary" onclick = "like('{{ file }}')">
 								<span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
 								<p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
