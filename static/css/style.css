@@ -7,3 +7,14 @@
     border-left: 50px solid transparent;
     font-style: italic;
 }
+
+.menu-photo {
+	width: 300px;
+	height: 400px;
+	display: block;
+	margin: 5px;
+}
+
+.judge {
+	margin: auto 3px;
+}
