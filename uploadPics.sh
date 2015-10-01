@@ -13,3 +13,6 @@ find $1 -name '.DS_Store' -exec rm {} \;
 scp -r $1 azureuser@gcsdJP:~/Rghoul/static/data/
 #curl http://rakuten-ghoul.xyz/update/
 curl http://gcsd-id-mars-japan.cloudapp.net/thisisupdate/
+
+#rsync -av 1.jpg azureuser@gcsdJP:/home/azureuser/Rghoul/static/data/
+#ln -fs ../images/BEEF.jpg 1.jpg
