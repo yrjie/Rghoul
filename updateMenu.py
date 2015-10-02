@@ -69,8 +69,10 @@ def parseDish(s, floor, lines, dishes, id2pic):
                 mealTime = line.split('Timezone": "')[1].split('",')[0][0]
             if 'MenuTypeTitle' in line:
                 booth = line.split('MenuTypeTitle": "')[1].split('",')[0]
-                dishes.append(dish(id, name, booth, ingredient, price, mealTime, floor))
-                id2pic[id] = getPic(s, floor, lookupId)
+                picid = getPic(s, floor, lookupId)
+                if picid:
+                    id2pic[id] = picid
+                    dishes.append(dish(id, name, booth, ingredient, price, mealTime, floor))
                 state = 1
             continue
 
