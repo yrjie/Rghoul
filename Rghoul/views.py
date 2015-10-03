@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseNotFound
 import os
@@ -29,25 +30,14 @@ def onDate(request, date = None, page = None):
     folders = utils.getDateList()
     dateObj = utils.getDateObj(date)
     useSp = dateObj > utils.dateSp  # sharepoint
-    for file in lunch9:
-        if useSp:
-            lunch9cnt[file] = getDishCnt(file)
-        else:
+    if not useSp:
+        for file in lunch9:
             lunch9cnt[file] = getPicCnt(file)
-    for file in lunch22:
-        if useSp:
-            lunch22cnt[file] = getDishCnt(file)
-        else:
+        for file in lunch22:
             lunch22cnt[file] = getPicCnt(file)
-    for file in dinner9:
-        if useSp:
-            dinner9cnt[file] = getDishCnt(file)
-        else:
+        for file in dinner9:
             dinner9cnt[file] = getPicCnt(file)
-    for file in dinner22:
-        if useSp:
-            dinner22cnt[file] = getDishCnt(file)
-        else:
+        for file in dinner22:
             dinner22cnt[file] = getPicCnt(file)
     showDinner = (dinner9cnt or dinner22cnt) and utils.getNowH() >= utils.dinnerH
     if page=="lunch":
@@ -71,28 +61,18 @@ def onDate(request, date = None, page = None):
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
                                              "cmts":cmts, "showDinner":showDinner})
-
-    lunch9name, lunch22name, dinner9name, dinner22name = {}, {}, {}, {}
-    lunch9ingd, lunch22ingd, dinner9ingd, dinner22ingd = {}, {}, {}, {}
+    lunch9info, lunch22info, dinner9info, dinner22info = {}, {}, {}, {}
     for file in lunch9:
-        lunch9name[file] = getDishName(file)
-        lunch9ingd[file] = getDishIngd(file)
+        lunch9info[file] = getDishInfo(file)
     for file in lunch22:
-        lunch22name[file] = getDishName(file)
-        lunch22ingd[file] = getDishIngd(file)
+        lunch22info[file] = getDishInfo(file)
     for file in dinner9:
-        dinner9name[file] = getDishName(file)
-        dinner9ingd[file] = getDishIngd(file)
+        dinner9info[file] = getDishInfo(file)
     for file in dinner22:
-        dinner22name[file] = getDishName(file)
-        dinner22ingd[file] = getDishIngd(file)
+        dinner22info[file] = getDishInfo(file)
     return render_to_response("indexSp.html", {"folders":folders, "date":date, 
-                                             "lunch9name":lunch9name, "lunch22name":lunch22name, 
-                                             "dinner9name":dinner9name, "dinner22name":dinner22name,
-                                             "lunch9ingd":lunch9ingd, "lunch22ingd":lunch22ingd, 
-                                             "dinner9ingd":dinner9ingd, "dinner22ingd":dinner22ingd,
-                                             "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
-                                             "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
+                                             "lunch9info":lunch9info, "lunch22info":lunch22info, 
+                                             "dinner9info":dinner9info, "dinner22info":dinner22info, 
                                              "cmts":cmts, "showDinner":showDinner})
 
 # not used
@@ -241,29 +221,15 @@ def getPicCnt(file):
         cnt[1] = pic.dislike
     return cnt
 
-def getDishCnt(file):
+def getDishInfo(file):
     id = utils.file2id(file)
     rs = Dish.objects.filter(id = id)
-    cnt = [0, 0]
-    for dish in rs:
-        cnt[0] = dish.like
-        cnt[1] = dish.dislike
-    return cnt
-
-def getDishName(file):
-    id = utils.file2id(file)
-    rs = Dish.objects.filter(id = id)
-    name = ''
+    ret = []
     for dish in rs:
         name = dish.name
         if dish.price:
-            name += "<font color=\"red\">(%d円)</font>" % dish.price
-    return name
-
-def getDishIngd(file):
-    id = utils.file2id(file)
-    rs = Dish.objects.filter(id = id)
-    ingd = []
-    for dish in rs:
-        ingd = utils.parseIngd(dish.ingredient)
-    return ingd
+            name += unicode("<font color=\"red\">(￥%d)</font>" % dish.price, "utf-8")
+        ret.append(name)
+        ret.append(utils.parseIngd(dish.ingredient))
+        ret.append([dish.like, dish.dislike])
+    return ret

@@ -71,6 +71,7 @@ def parseIngd(ingd):
     for i, x in enumerate(allIngd):
         if ingd & (1<<i):
             ret.append(x)
+    return ret
 
 def file2id(file):
     return int(file.split(".")[0])

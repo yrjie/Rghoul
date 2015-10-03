@@ -52,16 +52,21 @@
             <div id="lunch" class="tab-pane fade{% if not showDinner %} in active{% endif %}">
                 <div class="jumbotron well"><h2>Lunch@9th floor</h2></div>
                 <div class="row" id="lunch9">
-                    {% for file, cnt in lunch9cnt.items %}
-                    <div class="col-md-4"><img width=400 height=300 src="/static/data/{{ date }}/lunch9/{{ file }}">
+                    {% for file, info in lunch9info.items %}
+                    <div class="col-md-4">
+                        <p>{{ info.0 }}</p>
+                        <img width=400 height=300 src="/static/data/{{ date }}/lunch9/{{ file }}">
+                        {% for ingd in info.1 %}
+                        <img width=32 height=32 src="/static/images/{{ ingd }}.jpg">
+                        {% endfor %}
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary" onclick = "likeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
-                                <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
+                                <p id="like_{{ file }}" class="pic_like">{{ info.2.0 }}</p>
                             </button>
                             <button type="button" class="btn btn-info" onclick = "dislikeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
-                                <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
+                                <p id="dislike_{{ file }}">{{ info.2.1 }}</p>
                             </button>
                         </div>
                     </div>
@@ -69,7 +74,7 @@
                 </div>
                 <div class="jumbotron well"><h2>Lunch@22nd floor</h2></div>
                 <div class="row" id="lunch22">
-                    {% for file, cnt in lunch22cnt.items %}
+                    {% for file, info in lunch22info.items %}
                     <div class="col-md-4"><img width=400 height=300 src="/static/data/{{ date }}/lunch22/{{ file }}">
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary" onclick = "likeSp('{{ file }}')">
@@ -88,7 +93,7 @@
             <div id="dinner" class="tab-pane fade{% if showDinner %} in active{% endif %}">
                 <div class="jumbotron well"><h2>Dinner@9th floor</h2></div>
                 <div class="row" id="dinner9">
-                    {% for file, cnt in dinner9cnt.items %}
+                    {% for file, info in dinner9info.items %}
                     <div class="col-md-4"><img width=400 height=300 src="/static/data/{{ date }}/dinner9/{{ file }}">
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary" onclick = "likeSp('{{ file }}')">
@@ -105,7 +110,7 @@
                 </div>
                 <div class="jumbotron well"><h2>Dinner@22nd floor</h2></div>
                 <div class="row" id="dinner22">
-                    {% for file, cnt in dinner22cnt.items %}
+                    {% for file, info in dinner22info.items %}
                     <div class="col-md-4"><img width=400 height=300 src="/static/data/{{ date }}/dinner22/{{ file }}">
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary" onclick = "likeSp('{{ file }}')">
