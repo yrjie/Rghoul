@@ -249,3 +249,19 @@ def getDishCnt(file):
         cnt[0] = dish.like
         cnt[1] = dish.dislike
     return cnt
+
+def getDishName(file):
+    id = utils.file2id(file)
+    rs = Dish.objects.filter(id = id)
+    name = ''
+    for dish in rs:
+        name = dish.name
+    return name
+
+def getDishIngd(file):
+    id = utils.file2id(file)
+    rs = Dish.objects.filter(id = id)
+    ingd = []
+    for dish in rs:
+        ingd = utils.parseIngd(dish.ingredient)
+    return ingd

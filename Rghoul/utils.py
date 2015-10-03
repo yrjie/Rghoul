@@ -1,4 +1,3 @@
-import time
 import datetime
 import settings
 from os.path import isfile, join
@@ -8,20 +7,13 @@ import subprocess
 from dateutil import tz
 
 def getToday():
-    ts = time.time();
-    today = datetime.datetime.fromtimestamp(ts).strftime("%Y%m%d");
+    today = datetime.date.today().strftime("%Y%m%d");
     return today
 
 def getDateObj(dStr=None):
     if dStr==None:
         dStr = getToday()
     return datetime.datetime.strptime(dStr, "%Y%m%d").date()
-
-# not used
-def getNow():
-    ts = time.time();
-    now = datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S");
-    return now
 
 def getFileLists(date=None):
     if date==None:
@@ -85,4 +77,4 @@ def file2id(file):
 
 notFound = "<h1>Not Found</h1><p>The requested URL %s was not found on this server.</p>"
 dinnerH = 16
-dateSp = getDateObj("20151003") # sharepoint
+dateSp = getDateObj("20151002") # sharepoint

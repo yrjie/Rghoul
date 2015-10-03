@@ -10,7 +10,12 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import utils
+import datetime
+
+def getToday():
+    today = datetime.date.today().strftime("%Y%m%d");
+    return today
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -88,7 +93,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 STATICFILES_DIRS = ( os.path.join('static'), 'static/')
 
-today = utils.getToday()
+today = getToday()
 LOGGING = {
     'version': 1,
     'formatters': {
