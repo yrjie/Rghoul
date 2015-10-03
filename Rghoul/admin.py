@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Picture, Comment
+from models import Picture, Comment, Dish
 
 class PictureAdmin(admin.ModelAdmin):
     list_display = ("picName", "date", "mealTime", "floor", "like", "dislike")
