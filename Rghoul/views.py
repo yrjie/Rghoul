@@ -256,6 +256,8 @@ def getDishName(file):
     name = ''
     for dish in rs:
         name = dish.name
+        if dish.price:
+            name += "<font color=\"red\">(%d円)</font>" % dish.price
     return name
 
 def getDishIngd(file):
