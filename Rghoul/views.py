@@ -193,9 +193,8 @@ def updateSp(request):
     for x in allDishes:
         rs = Dish.objects.filter(id = x["id"])
         if rs:
-            d0 = rs[0]
-        else:
-            d0 = Dish()
+            continue
+        d0 = Dish()
         d0.id = x["id"]
         d0.name = x["name"]
         d0.booth = x["booth"]
