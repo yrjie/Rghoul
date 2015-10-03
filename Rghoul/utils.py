@@ -12,6 +12,12 @@ def getToday():
     today = datetime.datetime.fromtimestamp(ts).strftime("%Y%m%d");
     return today
 
+def getDateObj(dStr=None):
+    if dStr==None:
+        dStr = getToday()
+    return datetime.datetime.strptime(dStr, "%Y%m%d").date()
+
+# not used
 def getNow():
     ts = time.time();
     now = datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S");
@@ -29,7 +35,7 @@ def getFileLists(date=None):
             os.makedirs(prefix + "/lunch22")
             os.makedirs(prefix + "/dinner9")
             os.makedirs(prefix + "/dinner22")
-            subprocess.call(['chmod', '-R', '777', prefix])
+            subprocess.call(["chmod", "-R", "777", prefix])
         return [], [], [], []
     
     lunch9dir = prefix + "/lunch9"
@@ -48,11 +54,11 @@ def getDateList():
     return sorted([d for d in listdir(dataDir)], reverse=True)[0:10]
 
 def getClientIp(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
+        ip = x_forwarded_for.split(",")[0]
     else:
-        ip = request.META.get('REMOTE_ADDR')
+        ip = request.META.get("REMOTE_ADDR")
     return ip
 
 def getPdate(date):
@@ -61,4 +67,22 @@ def getPdate(date):
     now = date.astimezone(tky).strftime("%Y-%m-%d %H:%M:%S")
     return pdatetml % now
 
+def getNowH():
+    date = getTodayDate()
+    tky = tz.gettz("Asia/Tokyo")
+    nowH = int(date.astimezone(tky).strftime("%H"))
+    return nowH
+
+def parseIngd(ingd):
+    allIngd = ["ALCOHOL", "BEEF", "CHIKEN", "FISH", "HEALTHY", "MUTTON", "PORK"]
+    ret = []
+    for i, x in enumerate(allIngd):
+        if ingd & (1<<i):
+            ret.append(x)
+
+def file2id(file):
+    return int(file.split(".")[0])
+
 notFound = "<h1>Not Found</h1><p>The requested URL %s was not found on this server.</p>"
+dinnerH = 16
+dateSp = getDateObj("20151003") # sharepoint

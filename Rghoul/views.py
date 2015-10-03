@@ -3,10 +3,11 @@ from django.http import HttpResponse, HttpResponseNotFound
 import os
 import settings
 import utils
-from models import Picture, Comment
+from models import Picture, Comment, Dish
 import dateutil.parser
 from django.views.decorators.csrf import csrf_exempt
 from django.views.static import serve
+import json
 
 # Create your views here.
 def home(request):
@@ -26,35 +27,29 @@ def onDate(request, date = None, page = None):
     lunch9, lunch22, dinner9, dinner22 = utils.getFileLists(date)
     lunch9cnt, lunch22cnt, dinner9cnt, dinner22cnt = {}, {}, {}, {}
     folders = utils.getDateList()
+    dateObj = utils.getDateObj(date)
+    useSp = dateObj > utils.dateSp  # sharepoint
     for file in lunch9:
-        rs = Picture.objects.filter(picName = file)
-        cnt = [0, 0]
-        for pic in rs:
-            cnt[0] = pic.like
-            cnt[1] = pic.dislike
-        lunch9cnt[file] = cnt
+        if useSp:
+            lunch9cnt[file] = getDishCnt(file)
+        else:
+            lunch9cnt[file] = getPicCnt(file)
     for file in lunch22:
-        rs = Picture.objects.filter(picName = file)
-        cnt = [0, 0]
-        for pic in rs:
-            cnt[0] = pic.like
-            cnt[1] = pic.dislike
-        lunch22cnt[file] = cnt
+        if useSp:
+            lunch22cnt[file] = getDishCnt(file)
+        else:
+            lunch22cnt[file] = getPicCnt(file)
     for file in dinner9:
-        rs = Picture.objects.filter(picName = file)
-        cnt = [0, 0]
-        for pic in rs:
-            cnt[0] = pic.like
-            cnt[1] = pic.dislike
-        dinner9cnt[file] = cnt
+        if useSp:
+            dinner9cnt[file] = getDishCnt(file)
+        else:
+            dinner9cnt[file] = getPicCnt(file)
     for file in dinner22:
-        rs = Picture.objects.filter(picName = file)
-        cnt = [0, 0]
-        for pic in rs:
-            cnt[0] = pic.like
-            cnt[1] = pic.dislike
-        dinner22cnt[file] = cnt
-    showDinner = dinner9cnt or dinner22cnt
+        if useSp:
+            dinner22cnt[file] = getDishCnt(file)
+        else:
+            dinner22cnt[file] = getPicCnt(file)
+    showDinner = (dinner9cnt or dinner22cnt) and utils.getNowH() >= utils.dinnerH
     if page=="lunch":
         showDinner = False
     elif page=="dinner":
@@ -71,12 +66,36 @@ def onDate(request, date = None, page = None):
         group.append(x.context + utils.getPdate(x.date))
     if group:
         cmts.append(group)
-    return render_to_response("index.html", {"folders":folders, "date":date, 
+    if not useSp:
+        return render_to_response("index.html", {"folders":folders, "date":date, 
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
                                              "cmts":cmts, "showDinner":showDinner})
 
-# Not use now
+    lunch9name, lunch22name, dinner9name, dinner22name = {}, {}, {}, {}
+    lunch9ingd, lunch22ingd, dinner9ingd, dinner22ingd = {}, {}, {}, {}
+    for file in lunch9:
+        lunch9name[file] = getDishName(file)
+        lunch9ingd[file] = getDishIngd(file)
+    for file in lunch22:
+        lunch22name[file] = getDishName(file)
+        lunch22ingd[file] = getDishIngd(file)
+    for file in dinner9:
+        dinner9name[file] = getDishName(file)
+        dinner9ingd[file] = getDishIngd(file)
+    for file in dinner22:
+        dinner22name[file] = getDishName(file)
+        dinner22ingd[file] = getDishIngd(file)
+    return render_to_response("indexSp.html", {"folders":folders, "date":date, 
+                                             "lunch9name":lunch9name, "lunch22name":lunch22name, 
+                                             "dinner9name":dinner9name, "dinner22name":dinner22name,
+                                             "lunch9ingd":lunch9ingd, "lunch22ingd":lunch22ingd, 
+                                             "dinner9ingd":dinner9ingd, "dinner22ingd":dinner22ingd,
+                                             "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
+                                             "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
+                                             "cmts":cmts, "showDinner":showDinner})
+
+# not used
 def getLike(request, name):
     rs = Picture.objects.filter(picName = name)
     ret = 0
@@ -84,7 +103,7 @@ def getLike(request, name):
         ret = pic.like
     return HttpResponse(ret)
 
-# Not use now
+# not used
 def getDislike(request, name):
     rs = Picture.objects.filter(picName = name)
     ret = 0
@@ -108,6 +127,24 @@ def dislike(request, name):
         pic.dislike += 1
         ret = pic.dislike
         pic.save()
+    return HttpResponse(ret)
+
+def likeSp(request, name):
+    rs = Dish.objects.filter(id = file2id(name))
+    ret = 0
+    for x in rs:
+        x.like += 1
+        ret = x.like
+        x.save()
+    return HttpResponse(ret)
+
+def dislikeSp(request, name):
+    rs = Dish.objects.filter(id = file2id(name))
+    ret = 0
+    for x in rs:
+        x.dislike += 1
+        ret = x.dislike
+        x.save()
     return HttpResponse(ret)
 
 @csrf_exempt
@@ -167,6 +204,26 @@ def update(request):
             cnt += 1
     return HttpResponse("INFO: updated %d pictures" % cnt)
 
+# sharepoint
+@csrf_exempt
+def updateSp(request):
+    allDishes = json.loads(request.body)
+    cnt = 0
+    for x in allDishes:
+        d0 = Dish()
+        d0.id = x["id"]
+        d0.name = x["name"]
+        d0.booth = x["booth"]
+        d0.ingredient = x["ingredient"]
+        d0.price = x["price"]
+        d0.mealTime = x["mealTime"]
+        d0.floor = x["floor"]
+        d0.like = 0
+        d0.dislike = 0
+        d0.save()
+        cnt += 1
+    return HttpResponse("INFO(SP): updated %d pictures" % cnt)
+
 def favicon(request):
     filepath = settings.BASE_DIR + "/static/favicon.ico"
     return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
@@ -174,3 +231,21 @@ def favicon(request):
 def bookmark(request):
     folders = utils.getDateList()
     return render_to_response("bookmark.html", {"folders":folders})
+
+# common functions performing directly on models
+def getPicCnt(file):
+    rs = Picture.objects.filter(picName = file)
+    cnt = [0, 0]
+    for pic in rs:
+        cnt[0] = pic.like
+        cnt[1] = pic.dislike
+    return cnt
+
+def getDishCnt(file):
+    id = utils.file2id(file)
+    rs = Dish.objects.filter(id = id)
+    cnt = [0, 0]
+    for dish in rs:
+        cnt[0] = dish.like
+        cnt[1] = dish.dislike
+    return cnt
