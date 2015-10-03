@@ -55,11 +55,11 @@
                     {% for file, cnt in lunch9cnt.items %}
                     <div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/lunch9/{{ file }}">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" onclick = "like('{{ file }}')">
+                            <button type="button" class="btn btn-primary" onclick = "likeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
                                 <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
                             </button>
-                            <button type="button" class="btn btn-info" onclick = "dislike('{{ file }}')">
+                            <button type="button" class="btn btn-info" onclick = "dislikeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
                                 <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
                             </button>
@@ -72,11 +72,11 @@
                     {% for file, cnt in lunch22cnt.items %}
                     <div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/lunch22/{{ file }}">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" onclick = "like('{{ file }}')">
+                            <button type="button" class="btn btn-primary" onclick = "likeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
                                 <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
                             </button>
-                            <button type="button" class="btn btn-info" onclick = "dislike('{{ file }}')">
+                            <button type="button" class="btn btn-info" onclick = "dislikeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
                                 <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
                             </button>
@@ -91,11 +91,11 @@
                     {% for file, cnt in dinner9cnt.items %}
                     <div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/dinner9/{{ file }}">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" onclick = "like('{{ file }}')">
+                            <button type="button" class="btn btn-primary" onclick = "likeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
                                 <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
                             </button>
-                            <button type="button" class="btn btn-info" onclick = "dislike('{{ file }}')">
+                            <button type="button" class="btn btn-info" onclick = "dislikeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
                                 <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
                             </button>
@@ -108,11 +108,11 @@
                     {% for file, cnt in dinner22cnt.items %}
                     <div class="col-md-4"><img width=300 height=400 src="/static/data/{{ date }}/dinner22/{{ file }}">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" onclick = "like('{{ file }}')">
+                            <button type="button" class="btn btn-primary" onclick = "likeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Like&nbsp;
                                 <p id="like_{{ file }}" class="pic_like">{{ cnt.0 }}</p>
                             </button>
-                            <button type="button" class="btn btn-info" onclick = "dislike('{{ file }}')">
+                            <button type="button" class="btn btn-info" onclick = "dislikeSp('{{ file }}')">
                                 <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;So so
                                 <p id="dislike_{{ file }}">{{ cnt.1 }}</p>
                             </button>
