@@ -70,6 +70,7 @@ def onDate(request, date = None, page = None):
         dinner9info[file] = getDishInfo(file)
     for file in dinner22:
         dinner22info[file] = getDishInfo(file)
+    showDinner = (dinner9info or dinner22info) and utils.getNowH() >= utils.dinnerH
     return render_to_response("indexSp.html", {"folders":folders, "date":date, 
                                              "lunch9info":lunch9info, "lunch22info":lunch22info, 
                                              "dinner9info":dinner9info, "dinner22info":dinner22info, 
@@ -190,7 +191,11 @@ def updateSp(request):
     allDishes = json.loads(request.body)
     cnt = 0
     for x in allDishes:
-        d0 = Dish()
+        rs = Dish.objects.filter(id = x["id"])
+        if rs:
+            d0 = rs[0]
+        else:
+            d0 = Dish()
         d0.id = x["id"]
         d0.name = x["name"]
         d0.booth = x["booth"]

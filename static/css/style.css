@@ -18,3 +18,9 @@
 .judge {
 	margin: auto 3px;
 }
+
+.ingd {
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+}
