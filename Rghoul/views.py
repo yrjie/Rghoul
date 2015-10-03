@@ -130,7 +130,7 @@ def dislike(request, name):
     return HttpResponse(ret)
 
 def likeSp(request, name):
-    rs = Dish.objects.filter(id = file2id(name))
+    rs = Dish.objects.filter(id = utils.file2id(name))
     ret = 0
     for x in rs:
         x.like += 1
@@ -139,7 +139,7 @@ def likeSp(request, name):
     return HttpResponse(ret)
 
 def dislikeSp(request, name):
-    rs = Dish.objects.filter(id = file2id(name))
+    rs = Dish.objects.filter(id = utils.file2id(name))
     ret = 0
     for x in rs:
         x.dislike += 1
