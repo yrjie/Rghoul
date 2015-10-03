@@ -7,5 +7,8 @@ class PictureAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ("author", "context", "parent", "date")
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "booth", "ingredient", "price", "date", "mealTime", "floor", "like", "dislike")
+
 admin.site.register(Picture, PictureAdmin)
 admin.site.register(Comment, CommentAdmin)

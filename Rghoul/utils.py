@@ -68,7 +68,7 @@ def getPdate(date):
     return pdatetml % now
 
 def getNowH():
-    date = getTodayDate()
+    date = datetime.datetime.now().replace(tzinfo=tz.tzlocal())
     tky = tz.gettz("Asia/Tokyo")
     nowH = int(date.astimezone(tky).strftime("%H"))
     return nowH
