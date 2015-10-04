@@ -71,6 +71,10 @@ def onDate(request, date = None, page = None):
     for file in dinner22:
         dinner22info[file] = getDishInfo(file)
     showDinner = (dinner9info or dinner22info) and utils.getNowH() >= utils.dinnerH
+    if page=="lunch":
+        showDinner = False
+    elif page=="dinner":
+        showDinner = True
     return render_to_response("indexSp.html", {"folders":folders, "date":date, 
                                              "lunch9info":lunch9info, "lunch22info":lunch22info, 
                                              "dinner9info":dinner9info, "dinner22info":dinner22info, 
