@@ -130,7 +130,7 @@ urlPic = 'https://officerakuten.sharepoint.com/sites/Committees/cafeteria/MenuIm
 url2 = 'https://officerakuten.sharepoint.com/sites/Committees/cafeteria/IngredientIcons_9F/Forms/DispForm.aspx'
 url3 = 'https://officerakuten.sharepoint.com/sites/Committees/cafeteria/MenuImage_9F/Forms/DispForm.aspx?ID=186'
 urlIngd = 'https://officerakuten.sharepoint.com/sites/Committees/cafeteria/IngredientIcons_9F/%s.jpg'
-urlUpdate = 'http://gcsd-id-mars-japan.cloudapp.net/thisisupdate/'
+urlUpdate = 'http://gcsd-id-mars-japan.cloudapp.net/thisisupdateSp/'
 
 payload01 = {'username':'1@rakuten.com', 'wa':'wsignin1.0', 'wtrealm':'urn:federation:MicrosoftOnline', 'popupui':''}
 payload02 = {'wa': 'wsignin1.0',
@@ -194,9 +194,9 @@ with requests.session() as s:
     #         shutil.copyfileobj(ingdfile.raw, out_file)
     #     del ingdfile
     
-dishJson = json.dumps([vars(x) for x in dishes])
-print(dishJson)
-print(id2pic)
+dishJson = json.dumps([vars(x) for x in dishes]).replace('\\', '')
+# print(dishJson)
+# print(id2pic)
 
-# requests.post(urlUpdate, data=dishJson)
-
+ret = requests.post(urlUpdate, data=dishJson)
+print ret.text
