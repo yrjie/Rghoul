@@ -194,7 +194,7 @@ with requests.session() as s:
     #         shutil.copyfileobj(ingdfile.raw, out_file)
     #     del ingdfile
     
-dishJson = json.dumps([vars(x) for x in dishes]).replace('\\', '')
+dishJson = json.dumps([vars(x) for x in dishes]).replace('\\', '').replace('u3000', ' ')
 # print(dishJson)
 # print(id2pic)
 
