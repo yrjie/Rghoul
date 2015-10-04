@@ -1,6 +1,6 @@
 if [ $# -lt 1 ]
 then
-    echo 'Usage: dateFolder'
+    echo 'Usage: auto script'
     exit
 fi
 
@@ -23,5 +23,6 @@ find $imgDir -name '*.jpg' -mmin -30 -exec convert -resize 640x480 {} {} \;
 find $imgDir -name '*.jpg' -mmin -30 -exec scp {} azureuser@gcsdJP:~/Rghoul/$imgDir \;
 echo INFO: uploaded $numImg images
 
-find $1 -name '.DS_Store' -exec rm {} \;
-scp -r $1 azureuser@gcsdJP:~/Rghoul/$staticDir
+find $staticDir/$today/ -name '.DS_Store' -exec rm {} \;
+rsync -rav $staticDir/$today azureuser@gcsdJP:~/Rghoul/$staticDir/
+# rsync -rav $staticDir/$today/ azureuser@gcsdJP:~/Rghoul/$staticDir/$today  # also ok, if / exists at the end, only the entries under it will be copied
