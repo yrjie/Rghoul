@@ -1,6 +1,7 @@
 from Rghoul.models import Dish, Dish0
 
 props = [
+'id',
 'name',
 'booth',
 'ingredient',

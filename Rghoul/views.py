@@ -203,6 +203,7 @@ def updateSp(request):
         d0.name = x["name"]
         d0.booth = x["booth"]
         d0.ingredient = x["ingredient"]
+        d0.energy = x["energy"]
         d0.price = x["price"]
         d0.mealTime = x["mealTime"]
         d0.floor = x["floor"]
@@ -235,9 +236,11 @@ def getDishInfo(file):
     ret = []
     for dish in rs:
         name = dish.name
+        energy = dish.energy
         if dish.price:
             name += unicode("<font color=\"red\">(￥%d)</font>" % dish.price, "utf-8")
         ret.append(name)
         ret.append(utils.parseIngd(dish.ingredient))
+        ret.append(energy)
         ret.append([dish.like, dish.dislike])
     return ret

@@ -8,7 +8,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ("author", "context", "parent", "date")
 
 class DishAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "booth", "ingredient", "price", "date", "mealTime", "floor", "like", "dislike")
+    list_display = ("id", "name", "booth", "ingredient", "energy", "price", "date", "mealTime", "floor", "like", "dislike")
 
 admin.site.register(Picture, PictureAdmin)
 admin.site.register(Comment, CommentAdmin)
