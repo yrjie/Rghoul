@@ -1,7 +1,7 @@
 if [ $# -lt 1 ]
 then
-    echo 'Usage: auto script'
-    exit
+	echo 'auto script'
+	exit
 fi
 
 export PATH=$PATH:~/bin/
@@ -16,7 +16,7 @@ mkdir -p $staticDir/$today/dinner22
 
 imgDir = static/images/
 
-python updateMenu.py 1
+python3 updateMenu.py 1
 # find $imgDir -name '*.jpg' -cmin -30 -exec convert -auto-orient {} {} \;
 numImg = `find $imgDir -name '*.jpg' -mmin -30 |wc -l`
 find $imgDir -name '*.jpg' -mmin -30 -exec convert -resize 640x480 {} {} \;
