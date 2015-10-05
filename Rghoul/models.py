@@ -23,6 +23,7 @@ class Dish(models.Model):
     name = models.CharField(max_length=255)
     booth = models.CharField(max_length=20)
     ingredient = models.IntegerField()
+    energy = models.IntegerField()
     price = models.IntegerField()
     date = models.DateField(auto_now_add=True)
     mealTime = models.CharField(max_length=2) # L: Lunch, or D: Dinner
