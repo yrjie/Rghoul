@@ -38,7 +38,7 @@ class Comment(models.Model):
 	author = models.CharField(max_length=255)
 	context = models.CharField(max_length=2047)
 	parent = models.CharField(max_length=10) # parent page: the date
-	date = models.DateField(auto_now_add=True)
+	date = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
 		return self.context
