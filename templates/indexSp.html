@@ -54,7 +54,7 @@
                 <div class="row" id="lunch9">
                     {% for file, info in lunch9info.items %}
                     <div class="col-md-4">
-                        <h4>{{ info.0 | safe }}</h4>
+                        <h4 class="dishname">{{ info.0 | safe }}</h4>
                         <img width=360 height=270 src="/static/data/{{ date }}/lunch9/{{ file }}">
                         <div class="ingd">
                             {% for ingd in info.1 %}
@@ -79,7 +79,7 @@
                 <div class="row" id="lunch22">
                     {% for file, info in lunch22info.items %}
                     <div class="col-md-4">
-                        <h4>{{ info.0 | safe }}</h4>
+                        <h4 class="dishname">{{ info.0 | safe }}</h4>
                         <img width=360 height=270 src="/static/data/{{ date }}/lunch22/{{ file }}">
                         <div class="ingd">
                             {% for ingd in info.1 %}
@@ -106,7 +106,7 @@
                 <div class="row" id="dinner9">
                     {% for file, info in dinner9info.items %}
                     <div class="col-md-4">
-                        <h4>{{ info.0 | safe }}</h4>
+                        <h4 class="dishname">{{ info.0 | safe }}</h4>
                         <img width=360 height=270 src="/static/data/{{ date }}/dinner9/{{ file }}">
                         <div class="ingd">
                             {% for ingd in info.1 %}
@@ -131,7 +131,7 @@
                 <div class="row" id="dinner22">
                     {% for file, info in dinner22info.items %}
                     <div class="col-md-4">
-                        <h4>{{ info.0 | safe }}</h4>
+                        <h4 class="dishname">{{ info.0 | safe }}</h4>
                         <img width=360 height=270 src="/static/data/{{ date }}/dinner22/{{ file }}">
                         <div class="ingd">
                             {% for ingd in info.1 %}

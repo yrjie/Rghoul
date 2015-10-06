@@ -24,3 +24,9 @@
     white-space: nowrap;
     border-bottom: 3px solid transparent;
 }
+
+.dishname {
+    display:block;
+    width:100%;
+    height:30px;
+}
