@@ -1,7 +1,7 @@
 if [ $# -lt 1 ]
 then
-	echo 'auto script'
-	exit
+    echo 'auto script'
+    exit
 fi
 
 export PATH=$PATH:~/bin/
@@ -13,6 +13,7 @@ mkdir -p $staticDir/$today/lunch9
 mkdir -p $staticDir/$today/lunch22
 mkdir -p $staticDir/$today/dinner9
 mkdir -p $staticDir/$today/dinner22
+touch static/piclst/$today.txt
 
 imgDir = static/images/
 

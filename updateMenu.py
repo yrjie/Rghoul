@@ -14,11 +14,12 @@ if len(sys.argv)<2:
     exit(1)
 
 class dish:
-    def __init__(self, id, name, booth, ingredient, price, mealTime, floor):
+    def __init__(self, id, name, booth, ingredient, energy, price, mealTime, floor):
         self.id = id
         self.name = name
         self.booth = booth
         self.ingredient = ingredient
+        self.energy = energy
         self.price = price
         self.mealTime = mealTime
         self.floor = floor
@@ -59,6 +60,12 @@ def parseDish(s, floor, lines, dishes, id2pic):
                 for i, x in enumerate(ingdLst):
                     if x in ingds:
                         ingredient += (1<<i)
+            if 'Menu_x003a_Calory' in line:
+                temp = line.split('Menu_x003a_Calory": "')[1].split('",')[0]
+                if temp:
+                    energy = int(temp)
+                else:
+                    energy = 0
             if 'Menu_x003a_Value' in line:
                 temp = line.split('Menu_x003a_Value": "')[1].split('",')[0]
                 if temp:
@@ -72,7 +79,7 @@ def parseDish(s, floor, lines, dishes, id2pic):
                 picid = getPic(s, floor, lookupId)
                 if picid:
                     id2pic[id] = picid
-                    dishes.append(dish(id, name, booth, ingredient, price, mealTime, floor))
+                    dishes.append(dish(id, name, booth, ingredient, energy, price, mealTime, floor))
                 state = 1
             continue
 
@@ -194,7 +201,7 @@ with requests.session() as s:
     #         shutil.copyfileobj(ingdfile.raw, out_file)
     #     del ingdfile
     
-dishJson = json.dumps([vars(x) for x in dishes]).replace('\\', '').replace('u3000', ' ')
+dishJson = json.dumps([vars(x) for x in dishes]).replace('\\', '').replace('u3000', ' ').replace('uff53', 'ｓ')
 # print(dishJson)
 # print(id2pic)
 
