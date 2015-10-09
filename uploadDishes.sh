@@ -15,11 +15,11 @@ mkdir -p $staticDir/$today/dinner9
 mkdir -p $staticDir/$today/dinner22
 touch static/piclst/$today.txt
 
-imgDir = static/images/
+imgDir=static/images/
 
 python3 updateMenu.py 1
 # find $imgDir -name '*.jpg' -cmin -30 -exec convert -auto-orient {} {} \;
-numImg = `find $imgDir -name '*.jpg' -mmin -30 |wc -l`
+numImg=`find $imgDir -name '*.jpg' -mmin -30 |wc -l`
 find $imgDir -name '*.jpg' -mmin -30 -exec convert -resize 640x480 {} {} \;
 find $imgDir -name '*.jpg' -mmin -30 -exec scp {} azureuser@gcsdJP:~/Rghoul/$imgDir \;
 echo INFO: uploaded $numImg images
