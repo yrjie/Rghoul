@@ -235,7 +235,8 @@ def getDishInfo(file):
     rs = Dish.objects.filter(id = id)
     ret = []
     for dish in rs:
-        name = dish.name
+        booth = dish.booth.split("_")[1]
+        name = "<font color=\"#0174DF\">[" + booth  + "]</font> " + dish.name
         energy = dish.energy
         if dish.price:
             name += unicode("<font color=\"red\">(￥%d)</font>" % dish.price, "utf-8")
