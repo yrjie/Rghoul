@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Picture, Comment, Dish
+from models import Picture, Comment, Dish, Poll
 
 class PictureAdmin(admin.ModelAdmin):
     list_display = ("picName", "date", "mealTime", "floor", "like", "dislike")
@@ -10,6 +10,10 @@ class CommentAdmin(admin.ModelAdmin):
 class DishAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "booth", "ingredient", "energy", "price", "date", "mealTime", "floor", "like", "dislike")
 
+class PollAdmin(admin.ModelAdmin):
+    list_display = ("id", "code", "result")
+
 admin.site.register(Picture, PictureAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Dish, DishAdmin)
+admin.site.register(Poll, PollAdmin)

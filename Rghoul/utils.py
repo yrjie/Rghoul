@@ -76,6 +76,11 @@ def parseIngd(ingd):
 def file2id(file):
     return int(file.split(".")[0])
 
+def getFloorDish(choiceId):
+    # 9_xxx
+    spt = choiceId.split('_')
+    return int(spt[0]), int(spt[1])
+
 notFound = "<h1>Not Found</h1><p>The requested URL %s was not found on this server.</p>"
 dinnerH = 16
 dateSp = getDateObj("20151002") # sharepoint

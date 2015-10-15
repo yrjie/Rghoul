@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 import os
 import settings
 import utils
-from models import Picture, Comment, Dish
+from models import Picture, Comment, Dish, Poll
 import dateutil.parser
 from django.views.decorators.csrf import csrf_exempt
 from django.views.static import serve
 import json
+import string
+import random
 
 # Create your views here.
 def home(request):
@@ -221,6 +223,47 @@ def bookmark(request):
     folders = utils.getDateList()
     return render_to_response("bookmark.html", {"folders":folders})
 
+def createPoll(request):
+    codeLen = 6
+    codeChars = string.ascii_uppercase+string.ascii_lowercase+string.digits
+    code = ""
+    while True:
+        code = "".join(random.choice(codeChars) for _ in range(codeLen))
+        if not Poll.objects.filter(code = code):
+            break
+    p = Poll(code = code)
+    result = {}
+    result["0_-1"] = []  # any
+    result["9_-1"] = []  # 9 any
+    result["22_-1"] = []  # 22 any
+    lunch9, lunch22, dinner9, dinner22 = utils.getFileLists()
+    if utils.getNowH() >= utils.dinnerH:
+        dish9 = [int(x.split(".")[0]) for x in dinner9]
+        dish22 = [int(x.split(".")[0]) for x in dinner22]
+    else:
+        dish9 = [int(x.split(".")[0]) for x in lunch9]
+        dish22 = [int(x.split(".")[0]) for x in lunch22]
+    for d in dish9:
+        result["9_"+str(d)] = []
+    for d in dish22:
+        result["22_"+str(d)] = []
+    p.result = json.dumps(result)
+    p.save()
+    return redirect("/poll/%s/" % code)
+
+def showPoll(request, code):
+    folders = utils.getDateList()
+    if utils.getNowH() >= utils.dinnerH:
+        meal = "dinner"
+    else:
+        meal = "lunch"
+    dish0res, dish9res, dish9cnt, dish22res, dish22cnt = getDishResult(code)
+    if not dish9res:
+        return HttpResponseNotFound(utils.notFound % request.path_info)
+    return render_to_response("poll.html", {"folders":folders, "meal":meal, "code":code, "dish0res":dish0res,
+                                        "dish9res":dish9res, "dish9cnt":dish9cnt,
+                                        "dish22res":dish22res, "dish22cnt":dish22cnt})
+
 # common functions performing directly on models
 def getPicCnt(file):
     rs = Picture.objects.filter(picName = file)
@@ -245,3 +288,41 @@ def getDishInfo(file):
         ret.append(energy)
         ret.append([dish.like, dish.dislike])
     return ret
+
+def getDishResult(code):
+    p = Poll.objects.filter(code = code)
+    if not p:
+        return [], 0, [], 0
+    res = json.loads(p[0].result)
+    dishRes = {}
+    dishRes[0] = {}
+    dishRes[9] = {}
+    dishRes[22] = {}
+    dishCnt = {}
+    dishCnt[9] = 0
+    dishCnt[22] = 0
+    for x in res:
+        floor, id = utils.getFloorDish(x)
+        if floor == 0:
+            name = "Any dish is fine for me"
+        else:
+            if floor == 9:
+                name = "9th floor - "
+            else:
+                name = "22nd floor - "
+            d = Dish.objects.filter(id=id)
+            if d:
+                name += "[%s]%s" % (d.booth.split("_")[1], d.name)
+            else:
+                name += "Any dish is fine for me"
+        num = len(res[x])
+        if num:
+            val = "%d: %s" % (num, ",".join(res[x]))
+        else:
+            val = "0"
+        dishRes[floor][x] = []
+        dishRes[floor][x].append(name)
+        dishRes[floor][x].append(val)
+        if floor:
+            dishCnt[floor] += num
+    return dishRes[0], dishRes[9], dishCnt[9], dishRes[22], dishCnt[22]
