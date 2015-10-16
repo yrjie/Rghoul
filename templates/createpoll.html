@@ -47,69 +47,32 @@
                 </ul>
             </div>
         </nav>
-        <div class="jumbotron well"><h2>{{ title }}</h2><p class="owner">-- created by {{ owner }}</p></div>
-        <form class="form-horizontal" id="voteForm" method="POST" action="/vote/">
+        <div class="jumbotron well"><h2>Create a {{ meal }} poll</h2></div>
+        <form class="form-horizontal" id="pollForm" method="POST" action=".">
             <div class="form-group">
-                <label class="col-sm-1 control-label">Name</label>
+                <label class="col-sm-1 control-label">Poll Owner</label>
                 <div class="col-sm-3">
-                    <input class="form-control" name="voter" id="voter" placeholder="Your name">
+                    <input class="form-control" name="owner" placeholder="Your name">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-1 control-label">Preference</label>
-                <div class="col-sm-6">
-                    <select class="form-control" id="voteDish" name="voteDish" style="max-width:520px;">
-                        {% for id, val in dish0res.items %}
-                        <option value={{ id }}>{{ val.0 }}</option>
-                        {% endfor %}
-                        {% for id, val in dish9res.items %}
-                        <option value={{ id }}>{{ val.0 }}</option>
-                        {% endfor %}
-                        {% for id, val in dish22res.items %}
-                        <option value={{ id }}>{{ val.0 }}</option>
-                        {% endfor %}
-                    </select>
+                <label class="col-sm-1 control-label">Poll Title</label>
+                <div class="col-sm-3">
+                    <input class="form-control" name="title" value="Let's have {{ meal }} together!">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-6">
+                    <label><input type="checkbox" name="open" value="">Open to anyone</label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-success" name="submitVote">Submit</button>
+                    <button type="submit" class="btn btn-success" name="create">Create</button>
                 </div>
             </div>
-            <input type="hidden" value={{ code }}>
         </form>
-        <h3>Invite more people by sharing this page!</h3>
-        <p class="owner">http://rakuten-ghoul.xyz/poll/{{ code }}/</p>
-        <div class="jumbotron well"><h2>Poll result</h2></div>
-        <table>
-            {% for id, val in dish0res.items %}
-            <tr>
-                <td>{{ val.0 }}</td>
-                <td>{{ val.1 }}</td>
-                <td>{{ dish0cnt }}</td>
-            </tr>
-            {% endfor %}
-        </table>
     </div>
-
-    <script type="text/javascript">
-        var frm = $("#voteForm");
-        frm.submit(function (ev) {
-            var voter = document.getElementById("voter").value;
-            var voteDish = document.getElementById("voteDish").value;
-            $.ajax({
-                type: frm.attr("method"),
-                url: frm.attr("action"),
-                data: frm.serialize(),
-                success: function (data) {
-                    var val = document.getElementById("val_" + voteDish);
-                    cmt1.innerHTML = data + cmt1.innerHTML;
-                    frm[0].reset();
-                }
-            });
-            ev.preventDefault();
-        });
-    </script>
 
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

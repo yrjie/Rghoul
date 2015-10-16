@@ -45,13 +45,15 @@ def getDateList():
     dataDir = settings.BASE_DIR + "/static/data/"
     return sorted([d for d in listdir(dataDir)], reverse=True)[0:10]
 
-def getClientIp(request):
+def getMaskedIp(request):
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
         ip = x_forwarded_for.split(",")[0]
     else:
         ip = request.META.get("REMOTE_ADDR")
-    return ip
+    ipNum = ip.split(".")
+    ipNum[3] = "*"
+    return ".".join(ipNum)
 
 def getPdate(date):
     pdatetml = "\r\n<dd class=\"posttime\">posted at %s</dd>"
@@ -80,6 +82,9 @@ def getFloorDish(choiceId):
     # 9_xxx
     spt = choiceId.split('_')
     return int(spt[0]), int(spt[1])
+
+def escapeHtml(s):
+    return s.replace("<", "&lt;").replace(">", "&gt;")
 
 notFound = "<h1>Not Found</h1><p>The requested URL %s was not found on this server.</p>"
 dinnerH = 16

@@ -63,6 +63,13 @@ def onDate(request, date = None, page = None):
                                              "lunch9cnt":lunch9cnt, "lunch22cnt":lunch22cnt, 
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
                                              "cmts":cmts, "showDinner":showDinner})
+    isToday = date==utils.getToday()
+    meal = ""
+    # if isToday:
+    #     if utils.getNowH() >= utils.dinnerH:
+    #         meal = "dinner"
+    #     else:
+    #         meal = "lunch"
     lunch9info, lunch22info, dinner9info, dinner22info = {}, {}, {}, {}
     for file in lunch9:
         lunch9info[file] = getDishInfo(file)
@@ -77,7 +84,7 @@ def onDate(request, date = None, page = None):
         showDinner = False
     elif page=="dinner":
         showDinner = True
-    return render_to_response("indexSp.html", {"folders":folders, "date":date, 
+    return render_to_response("indexSp.html", {"folders":folders, "date":date, "meal":meal,
                                              "lunch9info":lunch9info, "lunch22info":lunch22info, 
                                              "dinner9info":dinner9info, "dinner22info":dinner22info, 
                                              "cmts":cmts, "showDinner":showDinner})
@@ -139,16 +146,14 @@ def comment(request, date = None):
     res = ""
     if request.POST.has_key("context") and len(request.POST["context"])>0:
         maxLen = Comment._meta.get_field("context").max_length
-        author = request.POST["author"].replace("<", "&lt;").replace(">", "&gt;")
+        author = utils.escapeHtml(request.POST["author"])
         if len(author) == 0:
-            ipNum = utils.getClientIp(request).split(".")
-            ipNum[3] = "*"
-            author = ".".join(ipNum)
+            author = utils.getMaskedIp(request)
         if author == "admin@mars":
             res = "<dt><font color=\"orange\">%s</font></dt>" % "admin"
         else:
             res = "<dt>%s</dt>" % author
-        context = request.POST["context"].replace("\r\n", "\n").replace("<", "&lt;").replace(">", "&gt;")
+        context = utils.escapeHtml(request.POST["context"].replace("\r\n", "\n"))
         for line in context.split("\n"):
             res += "\r\n<dd>%s</dd>" % line
         res = res[0:maxLen-55]
@@ -223,15 +228,28 @@ def bookmark(request):
     folders = utils.getDateList()
     return render_to_response("bookmark.html", {"folders":folders})
 
+@csrf_exempt
 def createPoll(request):
-    codeLen = 6
+    if not request.POST:
+        folders = utils.getDateList()
+        if utils.getNowH() >= utils.dinnerH:
+            meal = "dinner"
+        else:
+            meal = "lunch"
+        return render_to_response("createpoll.html", {"folders":folders, "meal":meal})
+    codeLen = 8
     codeChars = string.ascii_uppercase+string.ascii_lowercase+string.digits
     code = ""
     while True:
         code = "".join(random.choice(codeChars) for _ in range(codeLen))
-        if not Poll.objects.filter(code = code):
+        if not Poll.objects.filter(code=code):
             break
-    p = Poll(code = code)
+    owner = utils.escapeHtml(request.POST["owner"])
+    if not owner:
+        owner = utils.getMaskedIp(request)
+    title = utils.escapeHtml(request.POST["title"])
+    open = "open" in request.POST
+    p = Poll(owner=owner, title=title, open=open, parent=utils.getToday(), code=code)
     result = {}
     result["0_-1"] = []  # any
     result["9_-1"] = []  # 9 any
@@ -253,16 +271,23 @@ def createPoll(request):
 
 def showPoll(request, code):
     folders = utils.getDateList()
-    if utils.getNowH() >= utils.dinnerH:
-        meal = "dinner"
-    else:
-        meal = "lunch"
-    dish0res, dish9res, dish9cnt, dish22res, dish22cnt = getDishResult(code)
-    if not dish9res:
+    rs = Poll.objects.filter(code=code)
+    if not rs:
         return HttpResponseNotFound(utils.notFound % request.path_info)
-    return render_to_response("poll.html", {"folders":folders, "meal":meal, "code":code, "dish0res":dish0res,
+    poll = rs[0]
+    owner = poll.owner
+    title = poll.title
+    dish0res, dish0cnt, dish9res, dish9cnt, dish22res, dish22cnt = getDishResult(poll)
+    return render_to_response("poll.html", {"folders":folders, 
+                                        "owner":owner, "title":title, "code":code,
+                                        "dish0res":dish0res, "dish0cnt":dish0cnt,
                                         "dish9res":dish9res, "dish9cnt":dish9cnt,
                                         "dish22res":dish22res, "dish22cnt":dish22cnt})
+
+def vote(request):
+    voter = utils.escapeHtml(request.POST["voter"])
+    dish = utils.escapeHtml(request.POST["voter"])
+    return HttpResponse("")
 
 # common functions performing directly on models
 def getPicCnt(file):
@@ -289,16 +314,14 @@ def getDishInfo(file):
         ret.append([dish.like, dish.dislike])
     return ret
 
-def getDishResult(code):
-    p = Poll.objects.filter(code = code)
-    if not p:
-        return [], 0, [], 0
-    res = json.loads(p[0].result)
+def getDishResult(p):
+    res = json.loads(p.result)
     dishRes = {}
     dishRes[0] = {}
     dishRes[9] = {}
     dishRes[22] = {}
     dishCnt = {}
+    dishCnt[0] = 0
     dishCnt[9] = 0
     dishCnt[22] = 0
     for x in res:
@@ -323,6 +346,5 @@ def getDishResult(code):
         dishRes[floor][x] = []
         dishRes[floor][x].append(name)
         dishRes[floor][x].append(val)
-        if floor:
-            dishCnt[floor] += num
-    return dishRes[0], dishRes[9], dishCnt[9], dishRes[22], dishCnt[22]
+        dishCnt[floor] += num
+    return dishRes[0], dishCnt[0], dishRes[9], dishCnt[9], dishRes[22], dishCnt[22]

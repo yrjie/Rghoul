@@ -46,6 +46,10 @@ class Comment(models.Model):
 
 class Poll(models.Model):
     id = models.AutoField(primary_key=True)
+    owner = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    open = models.BooleanField(default=False)
+    parent = models.CharField(max_length=10) # parent page: the date
     code = models.CharField(max_length=10)
     result = models.CharField(max_length=2047)
 

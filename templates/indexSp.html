@@ -154,8 +154,12 @@
                 </div>
             </div>
         </div>
+        {% if meal %}
+        <h3>Want to invite some people for {{ meal }}? Create a poll to involve them!!</h3>
+        <a href="/createpoll/" class="btn btn-success" role="button">Create a {{ meal }} poll</a>
+        {% endif %}
         <div class="jumbotron well-sm"><h2>GhoulChat</h2></div>
-        <form class="form-horizontal" id="cmtForm" method="POST" action="comment/">
+        <form class="form-horizontal" id="cmtForm" method="POST" action="/comment/">
             <div class="form-group">
                 <label class="col-sm-1 control-label">Name</label>
                 <div class="col-sm-3">
