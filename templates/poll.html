@@ -47,7 +47,7 @@
                 </ul>
             </div>
         </nav>
-        <div class="jumbotron well"><h2>{{ title }}</h2><p class="owner">-- created by {{ owner }}</p></div>
+        <div class="jumbotron well"><h2>{{ title }}</h2><p class="leftind">-- created by {{ owner }}</p></div>
         <form class="form-horizontal" id="voteForm" method="POST" action="/vote/">
             <div class="form-group">
                 <label class="col-sm-1 control-label">Name</label>
@@ -76,17 +76,42 @@
                     <button type="submit" class="btn btn-success" name="submitVote">Submit</button>
                 </div>
             </div>
-            <input type="hidden" value={{ code }}>
+            <input type="hidden" name="code" value={{ code }}>
         </form>
         <h3>Invite more people by sharing this page!</h3>
-        <p class="owner">http://rakuten-ghoul.xyz/poll/{{ code }}/</p>
+        <p class="leftind">http://rakuten-ghoul.xyz/poll/{{ code }}/</p>
         <div class="jumbotron well"><h2>Poll result</h2></div>
         <table>
+            <thead>
+                <th>Dish name</th>
+                <th>Votes</th>
+                <th>Total</th>
+            </thead>
             {% for id, val in dish0res.items %}
             <tr>
                 <td>{{ val.0 }}</td>
-                <td>{{ val.1 }}</td>
-                <td>{{ dish0cnt }}</td>
+                <td id=lst_{{ id }}>{{ val.1 }}</td>
+                {% if forloop.counter == 1 %}
+                <td id=cnt_0 rowspan="{{ dish0res|length }}">{{ dish0cnt }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% for id, val in dish9res.items %}
+            <tr>
+                <td>{{ val.0 }}</td>
+                <td id=lst_{{ id }}>{{ val.1 }}</td>
+                {% if forloop.counter == 1 %}
+                <td id=cnt_9 rowspan="{{ dish9res|length }}">{{ dish9cnt }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% for id, val in dish22res.items %}
+            <tr>
+                <td>{{ val.0 }}</td>
+                <td id=lst_{{ id }}>{{ val.1 }}</td>
+                {% if forloop.counter == 1 %}
+                <td id=cnt_22 rowspan="{{ dish22res|length }}">{{ dish22cnt }}</td>
+                {% endif %}
             </tr>
             {% endfor %}
         </table>
@@ -97,13 +122,17 @@
         frm.submit(function (ev) {
             var voter = document.getElementById("voter").value;
             var voteDish = document.getElementById("voteDish").value;
+            var cntId = "cnt_" + voteDish.split("_")[0]
             $.ajax({
                 type: frm.attr("method"),
                 url: frm.attr("action"),
                 data: frm.serialize(),
                 success: function (data) {
-                    var val = document.getElementById("val_" + voteDish);
-                    cmt1.innerHTML = data + cmt1.innerHTML;
+                    var lst = document.getElementById("lst_" + voteDish);
+                    var cnt = document.getElementById(cntId)
+                    var sp = lst.innerHTML.split(":")
+                    lst.innerHTML = lst.innerHTML.replace(sp[0], parseInt(sp[0]) + 1) + data;
+                    cnt.innerHTML = "" + (parseInt(cnt.innerHTML) + 1)
                     frm[0].reset();
                 }
             });

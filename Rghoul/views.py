@@ -22,7 +22,7 @@ def detail(request, my_args):
         % (post.title, post.category, post.date_time, post.content))
     return HttpResponse(str)
 
-def onDate(request, date = None, page = None):
+def onDate(request, date=None, page=None):
     if date == None:
         date = utils.getToday()
     if page and page!="lunch" and page!="dinner":
@@ -64,13 +64,13 @@ def onDate(request, date = None, page = None):
                                              "dinner9cnt":dinner9cnt, "dinner22cnt":dinner22cnt,
                                              "cmts":cmts, "showDinner":showDinner})
     isToday = date==utils.getToday()
-    meal = ""
-    # if isToday:
-    #     if utils.getNowH() >= utils.dinnerH:
-    #         meal = "dinner"
-    #     else:
-    #         meal = "lunch"
     lunch9info, lunch22info, dinner9info, dinner22info = {}, {}, {}, {}
+    meal = ""
+    if isToday and (lunch9info or lunch22info or dinner9info or dinner22info):
+        if utils.getNowH() >= utils.dinnerH:
+            meal = "dinner"
+        else:
+            meal = "lunch"
     for file in lunch9:
         lunch9info[file] = getDishInfo(file)
     for file in lunch22:
@@ -91,7 +91,7 @@ def onDate(request, date = None, page = None):
 
 # not used
 def getLike(request, name):
-    rs = Picture.objects.filter(picName = name)
+    rs = Picture.objects.filter(picName=name)
     ret = 0
     for pic in rs:
         ret = pic.like
@@ -99,14 +99,14 @@ def getLike(request, name):
 
 # not used
 def getDislike(request, name):
-    rs = Picture.objects.filter(picName = name)
+    rs = Picture.objects.filter(picName=name)
     ret = 0
     for pic in rs:
         ret = pic.dislike
     return HttpResponse(ret)
     
 def like(request, name):
-    rs = Picture.objects.filter(picName = name)
+    rs = Picture.objects.filter(picName=name)
     ret = 0
     for pic in rs:
         pic.like += 1
@@ -115,7 +115,7 @@ def like(request, name):
     return HttpResponse(ret)
 
 def dislike(request, name):
-    rs = Picture.objects.filter(picName = name)
+    rs = Picture.objects.filter(picName=name)
     ret = 0
     for pic in rs:
         pic.dislike += 1
@@ -124,7 +124,7 @@ def dislike(request, name):
     return HttpResponse(ret)
 
 def likeSp(request, name):
-    rs = Dish.objects.filter(id = utils.file2id(name))
+    rs = Dish.objects.filter(id=utils.file2id(name))
     ret = 0
     for x in rs:
         x.like += 1
@@ -133,7 +133,7 @@ def likeSp(request, name):
     return HttpResponse(ret)
 
 def dislikeSp(request, name):
-    rs = Dish.objects.filter(id = utils.file2id(name))
+    rs = Dish.objects.filter(id=utils.file2id(name))
     ret = 0
     for x in rs:
         x.dislike += 1
@@ -142,7 +142,7 @@ def dislikeSp(request, name):
     return HttpResponse(ret)
 
 @csrf_exempt
-def comment(request, date = None):
+def comment(request, date=None):
     res = ""
     if request.POST.has_key("context") and len(request.POST["context"])>0:
         maxLen = Comment._meta.get_field("context").max_length
@@ -202,7 +202,7 @@ def updateSp(request):
     allDishes = json.loads(request.body)
     cnt = 0
     for x in allDishes:
-        rs = Dish.objects.filter(id = x["id"])
+        rs = Dish.objects.filter(id=x["id"])
         if rs:
             continue
         d0 = Dish()
@@ -284,10 +284,29 @@ def showPoll(request, code):
                                         "dish9res":dish9res, "dish9cnt":dish9cnt,
                                         "dish22res":dish22res, "dish22cnt":dish22cnt})
 
+@csrf_exempt
 def vote(request):
+    if not request.POST:
+        return HttpResponseNotFound(utils.notFound % request.path_info)
+    print request.POST
+    code = utils.escapeHtml(request.POST["code"])
+    rs = Poll.objects.filter(code=code)
+    if not rs:
+        return HttpResponseNotFound(utils.notFound % request.path_info)  # to be tested
     voter = utils.escapeHtml(request.POST["voter"])
-    dish = utils.escapeHtml(request.POST["voter"])
-    return HttpResponse("")
+    if not voter:
+        voter = utils.getMaskedIp(request)
+    dish = utils.escapeHtml(request.POST["voteDish"])
+    poll = rs[0]
+    res = json.loads(poll.result)
+    if res[dish]:
+        added = ", " + voter
+    else:
+        added = ": " + voter
+    res[dish].append(voter)
+    poll.result = json.dumps(res)
+    poll.save()
+    return HttpResponse(added)
 
 # common functions performing directly on models
 def getPicCnt(file):
@@ -340,7 +359,7 @@ def getDishResult(p):
                 name += "Any dish is fine for me"
         num = len(res[x])
         if num:
-            val = "%d: %s" % (num, ",".join(res[x]))
+            val = "%d: %s" % (num, ", ".join(res[x]))
         else:
             val = "0"
         dishRes[floor][x] = []
