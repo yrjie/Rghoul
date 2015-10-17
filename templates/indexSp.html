@@ -155,8 +155,27 @@
             </div>
         </div>
         {% if meal %}
+        <div class="jumbotron well-sm"><h2>Poll <small class="label label-danger">New!</small></h2></div>
         <h3>Want to invite some people for {{ meal }}? Create a poll to involve them!!</h3>
-        <a href="/createpoll/" class="btn btn-success" role="button">Create a {{ meal }} poll</a>
+        <div class="bottomind"><a href="/createpoll/" target="_blank" class="btn btn-success" role="button">Create a {{ meal }} poll</a></div>
+        {% if polls %}
+        <div class="bottomind">
+            <table>
+                <thead>
+                    <th>Poll title</th>
+                    <th>Owner</th>
+                    <th>Total votes</th>
+                </thead>
+                {% for id, poll in polls.items %}
+                <tr>
+                    <td><a href="/poll/{{ id }}/" target="_blank">{{ poll.0 }}</a></td>
+                    <td>{{ poll.1 }}</td>
+                    <td>{{ poll.2 }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
         {% endif %}
         <div class="jumbotron well-sm"><h2>GhoulChat</h2></div>
         <form class="form-horizontal" id="cmtForm" method="POST" action="/comment/">

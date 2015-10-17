@@ -51,7 +51,8 @@ class Poll(models.Model):
     open = models.BooleanField(default=False)
     parent = models.CharField(max_length=10) # parent page: the date
     code = models.CharField(max_length=10)
-    result = models.CharField(max_length=2047)
+    result = models.CharField(max_length=4096)
+    count = models.IntegerField()
 
     def __unicode__(self):
         return self.code

@@ -65,12 +65,6 @@ def onDate(request, date=None, page=None):
                                              "cmts":cmts, "showDinner":showDinner})
     isToday = date==utils.getToday()
     lunch9info, lunch22info, dinner9info, dinner22info = {}, {}, {}, {}
-    meal = ""
-    if isToday and (lunch9info or lunch22info or dinner9info or dinner22info):
-        if utils.getNowH() >= utils.dinnerH:
-            meal = "dinner"
-        else:
-            meal = "lunch"
     for file in lunch9:
         lunch9info[file] = getDishInfo(file)
     for file in lunch22:
@@ -79,15 +73,23 @@ def onDate(request, date=None, page=None):
         dinner9info[file] = getDishInfo(file)
     for file in dinner22:
         dinner22info[file] = getDishInfo(file)
+    meal = ""
+    if isToday and (lunch9info or lunch22info or dinner9info or dinner22info):
+        if utils.getNowH() >= utils.dinnerH:
+            meal = "dinner"
+        else:
+            meal = "lunch"
     showDinner = (dinner9info or dinner22info) and utils.getNowH() >= utils.dinnerH
     if page=="lunch":
         showDinner = False
     elif page=="dinner":
         showDinner = True
+    polls = getOpenPolls()
     return render_to_response("indexSp.html", {"folders":folders, "date":date, "meal":meal,
                                              "lunch9info":lunch9info, "lunch22info":lunch22info, 
                                              "dinner9info":dinner9info, "dinner22info":dinner22info, 
-                                             "cmts":cmts, "showDinner":showDinner})
+                                             "cmts":cmts, "showDinner":showDinner,
+                                             "polls":polls})
 
 # not used
 def getLike(request, name):
@@ -248,8 +250,10 @@ def createPoll(request):
     if not owner:
         owner = utils.getMaskedIp(request)
     title = utils.escapeHtml(request.POST["title"])
+    if not title:
+        title = "%s's poll" % owner
     open = "open" in request.POST
-    p = Poll(owner=owner, title=title, open=open, parent=utils.getToday(), code=code)
+    p = Poll(owner=owner, title=title, open=open, parent=utils.getToday(), code=code, count=0)
     result = {}
     result["0_-1"] = []  # any
     result["9_-1"] = []  # 9 any
@@ -270,15 +274,16 @@ def createPoll(request):
     return redirect("/poll/%s/" % code)
 
 def showPoll(request, code):
-    folders = utils.getDateList()
     rs = Poll.objects.filter(code=code)
     if not rs:
         return HttpResponseNotFound(utils.notFound % request.path_info)
+    folders = utils.getDateList()
     poll = rs[0]
     owner = poll.owner
     title = poll.title
+    count = poll.count
     dish0res, dish0cnt, dish9res, dish9cnt, dish22res, dish22cnt = getDishResult(poll)
-    return render_to_response("poll.html", {"folders":folders, 
+    return render_to_response("poll.html", {"folders":folders, "count":count,
                                         "owner":owner, "title":title, "code":code,
                                         "dish0res":dish0res, "dish0cnt":dish0cnt,
                                         "dish9res":dish9res, "dish9cnt":dish9cnt,
@@ -288,7 +293,6 @@ def showPoll(request, code):
 def vote(request):
     if not request.POST:
         return HttpResponseNotFound(utils.notFound % request.path_info)
-    print request.POST
     code = utils.escapeHtml(request.POST["code"])
     rs = Poll.objects.filter(code=code)
     if not rs:
@@ -305,6 +309,7 @@ def vote(request):
         added = ": " + voter
     res[dish].append(voter)
     poll.result = json.dumps(res)
+    poll.count += 1
     poll.save()
     return HttpResponse(added)
 
@@ -352,8 +357,9 @@ def getDishResult(p):
                 name = "9th floor - "
             else:
                 name = "22nd floor - "
-            d = Dish.objects.filter(id=id)
-            if d:
+            rs = Dish.objects.filter(id=id)
+            if rs:
+                d = rs[0]
                 name += "[%s]%s" % (d.booth.split("_")[1], d.name)
             else:
                 name += "Any dish is fine for me"
@@ -367,3 +373,15 @@ def getDishResult(p):
         dishRes[floor][x].append(val)
         dishCnt[floor] += num
     return dishRes[0], dishCnt[0], dishRes[9], dishCnt[9], dishRes[22], dishCnt[22]
+
+def getOpenPolls():
+    polls = {}
+    today = utils.getToday()
+    rs = Poll.objects.filter(open=True, parent=today)
+    for p in rs:
+        info = []
+        info.append(p.title)
+        info.append(p.owner)
+        info.append(p.count)
+        polls[p.code] = info
+    return polls

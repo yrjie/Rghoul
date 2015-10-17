@@ -15,10 +15,6 @@
 	margin: 5px;
 }
 
-.judge {
-	margin: auto 3px;
-}
-
 .ingd {
     overflow: hidden;
     white-space: nowrap;
@@ -35,8 +31,12 @@
     border-left: 150px solid transparent;
 }
 
+.bottomind{
+    border-bottom: 20px solid transparent;
+}
+
 table {
-  border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 td, th {
