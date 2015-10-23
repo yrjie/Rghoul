@@ -1,7 +1,6 @@
 from Rghoul.models import Dish, Dish0
 
 props = [
-'id',
 'name',
 'booth',
 'ingredient',
@@ -10,7 +9,8 @@ props = [
 'mealTime',
 'floor',
 'like',
-'dislike'
+'dislike',
+'energy'
 ]
 
 allD0 = Dish0.objects.all()
@@ -19,7 +19,7 @@ for d0 in allD0:
     d=Dish()
     for x in props:
         setattr(d, x, getattr(d0, x))
-    d.energy = 0
+    d.pid = d0.id
     d.save()
     cnt += 1
-    print cnt
+print cnt

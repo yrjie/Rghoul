@@ -126,7 +126,7 @@ def dislike(request, name):
     return HttpResponse(ret)
 
 def likeSp(request, name):
-    rs = Dish.objects.filter(id=utils.file2id(name))
+    rs = Dish.objects.filter(id=int(name))
     ret = 0
     for x in rs:
         x.like += 1
@@ -135,7 +135,7 @@ def likeSp(request, name):
     return HttpResponse(ret)
 
 def dislikeSp(request, name):
-    rs = Dish.objects.filter(id=utils.file2id(name))
+    rs = Dish.objects.filter(id=int(name))
     ret = 0
     for x in rs:
         x.dislike += 1
@@ -204,11 +204,13 @@ def updateSp(request):
     allDishes = json.loads(request.body)
     cnt = 0
     for x in allDishes:
-        rs = Dish.objects.filter(id=x["id"])
-        if rs:
-            continue
+        rs = Dish.objects.filter(pid=x["id"])
+        # if rs:
+        #     continue
         d0 = Dish()
-        d0.id = x["id"]
+        if rs:
+            d0.date = rs[0].date
+        d0.pid = x["id"]
         d0.name = x["name"]
         d0.booth = x["booth"]
         d0.ingredient = x["ingredient"]
@@ -323,19 +325,23 @@ def getPicCnt(file):
     return cnt
 
 def getDishInfo(file):
-    id = utils.file2id(file)
-    rs = Dish.objects.filter(id = id)
+    today = utils.getToday()
+    todayD = dateutil.parser.parse(today).date()
+    pid = utils.file2id(file)
+    rs = Dish.objects.filter(pid = pid, date__range = (todayD, todayD))
     ret = []
     for dish in rs:
         booth = dish.booth.split("_")[1]
         name = "<font color=\"#0174DF\">[" + booth  + "]</font> " + dish.name
         energy = dish.energy
+        id = dish.id
         if dish.price:
             name += unicode("<font color=\"red\">(￥%d)</font>" % dish.price, "utf-8")
         ret.append(name)
         ret.append(utils.parseIngd(dish.ingredient))
         ret.append(energy)
         ret.append([dish.like, dish.dislike])
+        ret.append(id)
     return ret
 
 def getDishResult(p):

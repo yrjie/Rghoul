@@ -20,6 +20,7 @@ class Picture(models.Model):
 
 class Dish(models.Model):
     id = models.IntegerField(primary_key=True)
+    pid = models.IntegerField()
     name = models.CharField(max_length=255)
     booth = models.CharField(max_length=20)
     ingredient = models.IntegerField()
