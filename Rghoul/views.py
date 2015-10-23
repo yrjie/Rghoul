@@ -125,8 +125,8 @@ def dislike(request, name):
         pic.save()
     return HttpResponse(ret)
 
-def likeSp(request, name):
-    rs = Dish.objects.filter(id=int(name))
+def likeSp(request, id):
+    rs = Dish.objects.filter(id=int(id))
     ret = 0
     for x in rs:
         x.like += 1
@@ -134,8 +134,8 @@ def likeSp(request, name):
         x.save()
     return HttpResponse(ret)
 
-def dislikeSp(request, name):
-    rs = Dish.objects.filter(id=int(name))
+def dislikeSp(request, id):
+    rs = Dish.objects.filter(id=int(id))
     ret = 0
     for x in rs:
         x.dislike += 1
