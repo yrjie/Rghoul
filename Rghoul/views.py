@@ -66,13 +66,13 @@ def onDate(request, date=None, page=None):
     isToday = date==utils.getToday()
     lunch9info, lunch22info, dinner9info, dinner22info = {}, {}, {}, {}
     for file in lunch9:
-        lunch9info[file] = getDishInfo(file)
+        lunch9info[file] = getDishInfo(file, date)
     for file in lunch22:
-        lunch22info[file] = getDishInfo(file)
+        lunch22info[file] = getDishInfo(file, date)
     for file in dinner9:
-        dinner9info[file] = getDishInfo(file)
+        dinner9info[file] = getDishInfo(file, date)
     for file in dinner22:
-        dinner22info[file] = getDishInfo(file)
+        dinner22info[file] = getDishInfo(file, date)
     meal = ""
     if isToday and (lunch9info or lunch22info or dinner9info or dinner22info):
         if utils.getNowH() >= utils.dinnerH:
@@ -324,11 +324,10 @@ def getPicCnt(file):
         cnt[1] = pic.dislike
     return cnt
 
-def getDishInfo(file):
-    today = utils.getToday()
-    todayD = dateutil.parser.parse(today).date()
+def getDishInfo(file, date):
+    dateD = dateutil.parser.parse(date).date()
     pid = utils.file2id(file)
-    rs = Dish.objects.filter(pid = pid, date__range = (todayD, todayD))
+    rs = Dish.objects.filter(pid = pid, date__range = (dateD, dateD))
     ret = []
     for dish in rs:
         booth = dish.booth.split("_")[1]
