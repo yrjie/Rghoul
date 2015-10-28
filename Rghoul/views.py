@@ -205,8 +205,8 @@ def updateSp(request):
     cnt = 0
     for x in allDishes:
         rs = Dish.objects.filter(pid=x["id"])
-        # if rs:
-        #     continue
+        if rs:
+            continue
         d0 = Dish()
         if rs:
             d0.date = rs[0].date
