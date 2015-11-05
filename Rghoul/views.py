@@ -201,10 +201,12 @@ def update(request):
 # sharepoint
 @csrf_exempt
 def updateSp(request):
+    today = utils.getToday()
+    todayD = dateutil.parser.parse(today).date()
     allDishes = json.loads(request.body)
     cnt = 0
     for x in allDishes:
-        rs = Dish.objects.filter(pid=x["id"])
+        rs = Dish.objects.filter(pid=x["id"], date__range=(todayD, todayD))
         if rs:
             continue
         d0 = Dish()
