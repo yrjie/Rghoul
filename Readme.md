@@ -8,4 +8,6 @@ dependencies
   sqlite-devel.x86_64
   openssl-devel.x86_64
   readline-devel.x86_64
+
+pip
   python-dateutil
