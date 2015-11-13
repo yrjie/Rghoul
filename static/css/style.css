@@ -18,7 +18,7 @@
 .ingd {
     overflow: hidden;
     white-space: nowrap;
-    border-bottom: 3px solid transparent;
+    height:35px;
 }
 
 .dishname {
