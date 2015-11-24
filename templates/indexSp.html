@@ -50,7 +50,7 @@
         
         <div class="tab-content">
             <div id="lunch" class="tab-pane fade{% if not showDinner %} in active{% endif %}">
-                <div class="jumbotron well"><h2>Lunch@9th floor</h2></div>
+                <div class="jumbotron well"><h2>Lunch@9th floor, {{ dateTtl }}</h2></div>
                 <div class="row" id="lunch9">
                     {% for file, info in lunch9info.items %}
                     <div class="col-md-4">
@@ -75,7 +75,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="jumbotron well"><h2>Lunch@22nd floor</h2></div>
+                <div class="jumbotron well"><h2>Lunch@22nd floor, {{ dateTtl }}</h2></div>
                 <div class="row" id="lunch22">
                     {% for file, info in lunch22info.items %}
                     <div class="col-md-4">
@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div id="dinner" class="tab-pane fade{% if showDinner %} in active{% endif %}">
-                <div class="jumbotron well"><h2>Dinner@9th floor</h2></div>
+                <div class="jumbotron well"><h2>Dinner@9th floor, {{ dateTtl }}</h2></div>
                 <div class="row" id="dinner9">
                     {% for file, info in dinner9info.items %}
                     <div class="col-md-4">
@@ -127,7 +127,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="jumbotron well"><h2>Dinner@22nd floor</h2></div>
+                <div class="jumbotron well"><h2>Dinner@22nd floor, {{ dateTtl }}</h2></div>
                 <div class="row" id="dinner22">
                     {% for file, info in dinner22info.items %}
                     <div class="col-md-4">

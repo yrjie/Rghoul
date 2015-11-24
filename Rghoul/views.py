@@ -85,11 +85,12 @@ def onDate(request, date=None, page=None):
     elif page=="dinner":
         showDinner = True
     polls = getOpenPolls()
+    dateTtl = dateObj.strftime("%m.%d")
     return render_to_response("indexSp.html", {"folders":folders, "date":date, "meal":meal,
                                              "lunch9info":lunch9info, "lunch22info":lunch22info, 
                                              "dinner9info":dinner9info, "dinner22info":dinner22info, 
                                              "cmts":cmts, "showDinner":showDinner,
-                                             "polls":polls})
+                                             "polls":polls, "dateTtl":dateTtl})
 
 # not used
 def getLike(request, name):
