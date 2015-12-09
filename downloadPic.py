@@ -33,7 +33,7 @@ url04 = 'https://portal.office.com/landing.aspx?target=%2fdefault.aspx&wa=wsigni
 url05 = 'https://officerakuten.sharepoint.com/_forms/default.aspx?apr=1&wa=wsignin1.0'
 url06 = 'https://o365.sso.rakuten-it.com/adfs/ls/'
 
-urlPic = 'https://officerakuten.sharepoint.com/sites/Committees/cafeteria/MenuImage_%dF/_w/%s_jpg.jpg'
+urlPic = 'https://officerakuten.sharepoint.com/sites/Committees/cafeteria/MenuImage_%dF/_w/%d_jpg.jpg'
 url9 = 'https://officerakuten.sharepoint.com/sites/Committees/cafeteria/Lists/Menu_9F/TodaysMenu.aspx'
 
 payload01 = {'username':'1@rakuten.com', 'wa':'wsignin1.0', 'wtrealm':'urn:federation:MicrosoftOnline', 'popupui':''}
@@ -80,6 +80,5 @@ with requests.session() as s:
         line = line.strip()
         if len(line) < 1:
             continue
-        [floor, picId] = [x for x in line.split()]
-        floor = int(floor)
+        [floor, picId] = [int(x) for x in line.split()]
         downloadPic(s, floor, picId)
