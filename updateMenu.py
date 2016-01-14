@@ -121,8 +121,6 @@ def getToday():
     today = datetime.datetime.fromtimestamp(ts).strftime("%Y%m%d");
     return today
 
-pw=getpass.getpass()
-
 # url01 = 'https://adfs.mail.rakuten.com/adfs/ls/auth/integrated/'
 url01 = 'https://o365.sso.rakuten-it.com/adfs/ls/wia'
 url02 = 'https://login.microsoftonline.com/login.srf'
@@ -157,19 +155,25 @@ id2pic = {}
 parser=html.parser.HTMLParser()
 
 with requests.session() as s:
-    s.auth = HttpNtlmAuth('INTRA\\ruijie.yang', pw, s)
-    s.headers.update({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.93 Safari/537.36',
-        'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Encoding':'gzip, deflate',
-        'Accept-Language':'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-        'Cache-Control':'max-age=0',
-        'Connection':'keep-alive',
-        'Content-Type':'application/x-www-form-urlencoded',
-        'Upgrade-Insecure-Requests':'1'
-        })
-    # ret01 = s.get(url02)
-    # payload01['wctx'] = ret01.text.split('wctx=')[1].split('\\u0026')[0]
-    ret01 = s.get(url01)
+    while True:
+        pw=getpass.getpass()
+        s.auth = HttpNtlmAuth('INTRA\\ruijie.yang', pw, s)
+        s.headers.update({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.93 Safari/537.36',
+            'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Encoding':'gzip, deflate',
+            'Accept-Language':'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+            'Cache-Control':'max-age=0',
+            'Connection':'keep-alive',
+            'Content-Type':'application/x-www-form-urlencoded',
+            'Upgrade-Insecure-Requests':'1'
+            })
+        # ret01 = s.get(url02)
+        # payload01['wctx'] = ret01.text.split('wctx=')[1].split('\\u0026')[0]
+        ret01 = s.get(url01)
+        if '[200]' in ret01.text:
+            break
+        else:
+            print('Authentication failed, please try again')
     payload01['wctx'] = 'estsredirect=2&estsrequest=rQIIAbPSySgpKSi20tcvyC8qSczRy81MLsovzk8ryc_LycxL1UvOz9XLL0rPTAGxioS4BBYVHnL4-T7Qcc-kppq1-SXbVjEqEzZC_wIj4wtGxltMgv5F6Z4p4cVuqSmpRYklmfl5j5h4Q4tTi_zzcipD8rNT8yYx8-Xkp2fmxRcXpcWn5eSXAwWAJhQkJpfEl2QmZ6eW7GJWSTYySDEwSkvSTTQ2T9M1MTU30LUwMjXXNUlLNrBINkhMTTZJu8AicICTEQA1'
     # payload02['wctx'] = payload01['wctx']
     ret01 = s.get(url06, params=payload01)
