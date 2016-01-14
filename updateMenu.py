@@ -155,18 +155,18 @@ id2pic = {}
 parser=html.parser.HTMLParser()
 
 with requests.session() as s:
+    s.headers.update({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.93 Safari/537.36',
+        'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Encoding':'gzip, deflate',
+        'Accept-Language':'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+        'Cache-Control':'max-age=0',
+        'Connection':'keep-alive',
+        'Content-Type':'application/x-www-form-urlencoded',
+        'Upgrade-Insecure-Requests':'1'
+        })
     while True:
         pw=getpass.getpass()
         s.auth = HttpNtlmAuth('INTRA\\ruijie.yang', pw, s)
-        s.headers.update({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.93 Safari/537.36',
-            'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Encoding':'gzip, deflate',
-            'Accept-Language':'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-            'Cache-Control':'max-age=0',
-            'Connection':'keep-alive',
-            'Content-Type':'application/x-www-form-urlencoded',
-            'Upgrade-Insecure-Requests':'1'
-            })
         # ret01 = s.get(url02)
         # payload01['wctx'] = ret01.text.split('wctx=')[1].split('\\u0026')[0]
         ret01 = s.get(url01)
