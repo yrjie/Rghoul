@@ -84,13 +84,15 @@
         <table>
             <thead>
                 <th>Dish name</th>
+                <th>Energy</th>
                 <th>Votes</th>
                 <th>Total</th>
             </thead>
             {% for id, val in dish0res.items %}
             <tr>
                 <td>{{ val.0 }}</td>
-                <td id=lst_{{ id }}>{{ val.1|safe }}</td>
+                <td>{{ val.1 }}</td>
+                <td id=lst_{{ id }}>{{ val.2|safe }}</td>
                 {% if forloop.counter == 1 %}
                 <td id=cnt_0 rowspan="{{ dish0res|length }}">{{ dish0cnt }}</td>
                 {% endif %}
@@ -99,7 +101,8 @@
             {% for id, val in dish9res.items %}
             <tr>
                 <td>{{ val.0 }}</td>
-                <td id=lst_{{ id }}>{{ val.1|safe }}</td>
+                <td>{{ val.1 }}</td>
+                <td id=lst_{{ id }}>{{ val.2|safe }}</td>
                 {% if forloop.counter == 1 %}
                 <td id=cnt_9 rowspan="{{ dish9res|length }}">{{ dish9cnt }}</td>
                 {% endif %}
@@ -108,7 +111,8 @@
             {% for id, val in dish22res.items %}
             <tr>
                 <td>{{ val.0 }}</td>
-                <td id=lst_{{ id }}>{{ val.1|safe }}</td>
+                <td>{{ val.1 }}</td>
+                <td id=lst_{{ id }}>{{ val.2|safe }}</td>
                 {% if forloop.counter == 1 %}
                 <td id=cnt_22 rowspan="{{ dish22res|length }}">{{ dish22cnt }}</td>
                 {% endif %}

@@ -217,7 +217,10 @@ def updateSp(request):
         d0.name = x["name"]
         d0.booth = x["booth"]
         d0.ingredient = x["ingredient"]
-        d0.energy = x["energy"]
+        if "<Simple Wamen>" in x["name"]:
+            d0.energy = 320
+        else:
+            d0.energy = x["energy"]
         d0.price = x["price"]
         d0.mealTime = x["mealTime"]
         d0.floor = x["floor"]
@@ -368,9 +371,11 @@ def getDishResult(p):
             rs = Dish.objects.filter(id=id)
             if rs:
                 d = rs[0]
-                name += "[%s]%s" % (d.booth.split("_")[1], d.name)
+                name += "[%s] %s" % (d.booth.split("_")[1], d.name)
+                energy = "%d kcal" % d.energy
             else:
                 name += "Any dish is fine for me"
+                energy = "-"
         num = len(res[x])
         if num:
             val = "%d: %s" % (num, ", ".join(res[x]))
@@ -378,6 +383,7 @@ def getDishResult(p):
             val = "0"
         dishRes[floor][x] = []
         dishRes[floor][x].append(name)
+        dishRes[floor][x].append(energy)
         dishRes[floor][x].append(val)
         dishCnt[floor] += num
     return dishRes[0], dishCnt[0], dishRes[9], dishCnt[9], dishRes[22], dishCnt[22]
