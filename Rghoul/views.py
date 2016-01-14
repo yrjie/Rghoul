@@ -363,12 +363,13 @@ def getDishResult(p):
         floor, id = utils.getFloorDish(x)
         if floor == 0:
             name = "Any dish is fine for me"
+            energy = "-"
         else:
             if floor == 9:
                 name = "9th floor - "
             else:
                 name = "22nd floor - "
-            rs = Dish.objects.filter(id=id)
+            rs = Dish.objects.filter(pid=id, floor=floor).order_by("-id")
             if rs:
                 d = rs[0]
                 name += "[%s] %s" % (d.booth.split("_")[1], d.name)
