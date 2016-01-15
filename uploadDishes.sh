@@ -4,6 +4,7 @@ then
     exit
 fi
 
+trap "exit" INT
 export PATH=$PATH:~/bin/
 
 staticDir=static/data/

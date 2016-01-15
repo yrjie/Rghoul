@@ -164,19 +164,24 @@ with requests.session() as s:
         'Content-Type':'application/x-www-form-urlencoded',
         'Upgrade-Insecure-Requests':'1'
         })
+    payload01['wctx'] = 'estsredirect=2&estsrequest=rQIIAbPSySgpKSi20tcvyC8qSczRy81MLsovzk8ryc_LycxL1UvOz9XLL0rPTAGxioS4BBYVHnL4-T7Qcc-kppq1-SXbVjEqEzZC_wIj4wtGxltMgv5F6Z4p4cVuqSmpRYklmfl5j5h4Q4tTi_zzcipD8rNT8yYx8-Xkp2fmxRcXpcWn5eSXAwWAJhQkJpfEl2QmZ6eW7GJWSTYySDEwSkvSTTQ2T9M1MTU30LUwMjXXNUlLNrBINkhMTTZJu8AicICTEQA1'
     while True:
         pw=getpass.getpass()
         s.auth = HttpNtlmAuth('INTRA\\ruijie.yang', pw, s)
-        # ret01 = s.get(url02)
-        # payload01['wctx'] = ret01.text.split('wctx=')[1].split('\\u0026')[0]
-        ret01 = s.get(url01)
-        if '[200]' in ret01.text:
+        ret01 = s.get(url06, params=payload01)
+        if '<title>Working...' in ret01.text:
             break
         else:
             print('Authentication failed, please try again')
-    payload01['wctx'] = 'estsredirect=2&estsrequest=rQIIAbPSySgpKSi20tcvyC8qSczRy81MLsovzk8ryc_LycxL1UvOz9XLL0rPTAGxioS4BBYVHnL4-T7Qcc-kppq1-SXbVjEqEzZC_wIj4wtGxltMgv5F6Z4p4cVuqSmpRYklmfl5j5h4Q4tTi_zzcipD8rNT8yYx8-Xkp2fmxRcXpcWn5eSXAwWAJhQkJpfEl2QmZ6eW7GJWSTYySDEwSkvSTTQ2T9M1MTU30LUwMjXXNUlLNrBINkhMTTZJu8AicICTEQA1'
+        # ret01 = s.get(url02)
+        # payload01['wctx'] = ret01.text.split('wctx=')[1].split('\\u0026')[0]
+        # ret01 = s.get(url01)
+        # print(ret01.text)
+        # if '[200]' in ret01.text:
+        #     break
+        # else:
+        #     print('Authentication failed, please try again')
     # payload02['wctx'] = payload01['wctx']
-    ret01 = s.get(url06, params=payload01)
     payload02['wresult'] = parser.unescape(ret01.text.split('name="wresult" value="')[1].split('" />')[0])
     payload02['wctx'] = parser.unescape(ret01.text.split('name="wctx" value="')[1].split('" />')[0])
     ret02 = s.post(url02, data=payload02)
