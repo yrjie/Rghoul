@@ -400,3 +400,7 @@ def getOpenPolls():
         info.append(p.count)
         polls[p.code] = info
     return polls
+
+def about(request):
+    folders = utils.getDateList()
+    return render_to_response("about.html", {"folders":folders})

@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^createpoll/$', views.createPoll),
     url(r'^poll/(?P<code>.+)/$', views.showPoll),
     url(r'^vote/$', views.vote),
+    url(r'^about/$', views.about),
 
     url(r'^thisisadmin/', include(admin.site.urls)),
 ) #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
