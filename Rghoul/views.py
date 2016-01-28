@@ -404,3 +404,18 @@ def getOpenPolls():
 def about(request):
     folders = utils.getDateList()
     return render_to_response("about.html", {"folders":folders})
+
+def close(request):
+    cmts = []
+    allcmts = Comment.objects.order_by("-id")[0:50]
+    groupSize = 10
+    group = []
+    for i, x in enumerate(allcmts):
+        if i%groupSize == 0:
+            if i>0:
+                cmts.append(group)
+            group = []
+        group.append(x.context + utils.getPdate(x.date))
+    if group:
+        cmts.append(group)
+    return render_to_response("close.html", {"cmts":cmts})
