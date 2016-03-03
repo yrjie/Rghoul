@@ -1,0 +1,10 @@
+applications:
+- name: rakuten-ghoul
+  memory: 512M
+  instances: 1
+  buildpack: https://github.com/rakutentech/python-buildpack.git
+  domains:
+  - dev.jpe2.rpaas.net
+  env:
+    SKIP_CF_STACK_CHECK: "true"
+  stack: dev
